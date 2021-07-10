@@ -1,0 +1,984 @@
+<!--Copyright: "Copyright (c) 2021 HangYan"-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FILE MANAGEMENT SYSTEM</title>
+    {#    <meta charset="utf-8">#}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="Template Monster Admin Template">
+    <meta property="og:description"
+          content="brevis, barbatus clabulares aliquando convertam de dexter, peritus capio. devatio clemens habitio est.">
+    <link rel="stylesheet" href="/static/components/base/base.css">
+    <style>
+        .btn.topaz {
+        {#border-top-left-radius: 32px !important;#} border-top-right-radius: 60px;
+            border-bottom-right-radius: 60px;
+            border-bottom-left-radius: 60px;
+        }
+
+        .custom-control-text.topaz{
+            color: #1c54e2;
+            {#text-decoration: underline;#}
+            font-size: 0.98rem;
+            font-weight: 500;
+        }
+
+        .custom-control-text.topaz:hover {
+            color: #a6b2d4;
+        }
+
+        .topaz_title1{
+            font-weight: 600;
+            margin-left: 18px;
+            font-size: 20px;
+        }
+
+        .form-label.topaz_title2{
+            font-size: 0.98rem;
+            font-weight: 600;
+            padding: 0;
+        }
+        ::-webkit-scrollbar-thumb:horizontal { /*水平滚动条的样式*/
+        	width: 5px;
+        	background-color: #CCCCCC;
+            {#background-color: #a4bbf9;#}
+        	-webkit-border-radius: 6px;
+        }
+        ::-webkit-scrollbar-track-piece {
+        	background-color: #fff; /*滚动条的背景颜色*/
+        	-webkit-border-radius: 0; /*滚动条的圆角宽度*/
+        }
+        ::-webkit-scrollbar {
+        	width: 10px; /*滚动条的宽度*/
+        	height: 8px; /*滚动条的高度*/
+        }
+        ::-webkit-scrollbar-thumb:vertical { /*垂直滚动条的样式*/
+        	height: 50px;
+        	background-color: #999;
+        	-webkit-border-radius: 4px;
+        	outline: 2px solid #fff;
+        	outline-offset: -2px;
+        	border: 2px solid #fff;
+        }
+
+        ::-webkit-scrollbar-thumb:hover { /*滚动条的hover样式*/
+        	height: 50px;
+        	{#background-color: #9f9f9f;#}
+            background-color:  #a4bbf9;
+        	-webkit-border-radius: 4px;
+        }
+
+
+        #cover{
+            position:absolute;left:0px;top:0px;
+            background:rgba(0, 0, 0, 0.4);
+            width:100%;  /*宽度设置为100%，这样才能使隐藏背景层覆盖原页面*/
+            height:100%;
+            filter:alpha(opacity=60);  /*设置透明度为60%*/
+            opacity:0.6;  /*非IE浏览器下设置透明度为60%*/
+            display:none;
+            z-Index:999;
+        }
+        #modal{
+            position:absolute;
+            width: auto;
+            height: auto;
+            min-width: 600px;
+            max-width: 800px;
+            overflow: auto;
+
+            max-height: 600px;
+            top: 28%;
+            left: 28%;
+            background-color:#fff;
+            display:none;
+            cursor:pointer;
+            z-Index:9999;
+            color: #264555;
+            font-size: 26px;
+            box-shadow: 0px 34px 40px rgba(38, 69, 85, 0.06);
+            padding: 1.18125rem 1.75rem;
+        }
+
+    </style>
+
+
+</head>
+<body>
+    <div id="modal"  style=" border: 2px solid #f2f2f2; border-radius: 10px ">
+        <div class="title-1 text-md-center" style="font-size: 22px; margin-top: 18px; color: #a4bbf9;">
+            <span class="icon blurb-icon linearicons-bubble-video" style="font-size: 1.88rem;">
+            </span>
+            <span id="upload_info" style="margin-left: 2%;margin-top: -1%"> 文件上传中, 请勿刷新或关闭页面 ......</span>
+            <p></p>
+            <span id="md5_info" style="width: 98%;max-height: 62px; overflow-y: scroll; display: none; font-size: 12px; text-align: left">
+                (计算 md5 值中, 请稍后<span id="md5_process">  </span> ... )
+            </span>
+
+            <span id="log_info" style="width: 98%;max-height: 62px; overflow-y: scroll; display: none; font-size: 12px; text-align: left">
+
+            </span>
+        </div>
+
+            <ul id="file_list" class="list list-marked" style=" margin-top: 28px; color: #a4bbf9;">
+            </ul>
+
+            <li id="li_model" class="list-item" style="display: none; font-size: 0.88rem;  margin-left: 8px; margin-top: 10px; max-height: 23px ">
+                <button name="control" value="true"></button>
+                <span style="min-width: 280px;max-width: 280px; display: inline-block; text-align:left; line-height: 1; overflow: hidden;   text-overflow: ellipsis; white-space:nowrap;"></span>
+                <span style="min-width: 120px; font-size: 0.88rem; display: inline-block; color: #1c54e2; text-align: center;">0%</span>
+
+                <button  class="custom-control-text topaz mdi-pause-circle"  name="pause" onclick="ContorlTag(this)" style="display: inline-block;">
+                    暂停
+                </button>
+
+                <button  class="custom-control-text topaz  mdi-play-circle"  name="play" onclick="ContorlTag(this)" style="display: none; ">
+                    继续
+                </button>
+            </li>
+
+
+        <p></p>
+        <div>
+            <span name="complete"  onclick="HideShadow()" style="float:right;margin-top: 18px;display: inline-block;box-shadow: rgba(108, 117, 125, 0.1) 1px 24px 16px;background-color: rgb(255, 255, 255);font-size: 0.88rem;width: 88px; text-align: center;height: 36px;line-height: 2.2;color: #a6b2d4;border-radius: 10px;border: 1px solid #a5adc036;">
+                <span class="mdi-check">
+                    确认完成
+                </span>
+            </span>
+            <span name="close"  onclick="HideShadow()" style="float:right; margin-left: 10px; margin-top: 18px;display: inline-block;box-shadow: rgba(108, 117, 125, 0.1) 1px 24px 16px;background-color: rgb(255, 255, 255);font-size: 0.88rem;width: 88px; text-align: center;height: 36px;line-height: 2.2;color: #a6b2d4;border-radius: 10px;border: 1px solid #a5adc036;">
+                <span class="mdi-close-octagon">
+                    取消上传
+                </span>
+            </span>
+
+
+
+        </div>
+    </div>
+
+
+<div class="page">
+    <!--RD Navbar-->
+{#        <div id="open" onclick="ShowShadow()">打开弹框</div>#}
+    <div id="cover"></div>
+{# Header  #}
+    <header class="section rd-navbar-wrap rd-navbar-wrap-transparent">
+        <nav id="shop_header" class="rd-navbar rd-navbar-solid rd-navbar-transparent"
+             data-rd-navbar='{"responsive":{"1200":{"stickUpOffset":"164px"}}}'>
+            <div class="navbar-section navbar-non-stuck">
+                <div class="navbar-panel">
+                    <button class="navbar-switch mdi-menu novi-icon"
+                            data-multi-switch='{"targets":".rd-navbar","scope":".rd-navbar","isolate":"[data-multi-switch]"}'></button>
+                    <div class="navbar-logo">
+                        <a class="navbar-navigation-root-link" href="/" style="width: 160%; font-size: 22px; font-weight: 500; margin-top: -4%;"> 文件管理系统 </a>
+                    </div>
+                </div>
+                <div class="navbar-container">
+                    <div class="navbar-cell flex-grow-1">
+                        <div class="navbar-info">
+                            <div class="list list-icons-2">
+                                <div class="list-item">
+                                    <li class="navbar-navigation-root-item">
+                                        <a id="shop_title" class="navbar-navigation-root-link" href="/"
+                                           style="font-size: 28px; font-weight: 500;"> 文件管理系统 </a>
+                                    </li>
+                                </div>
+                            </div>
+                            <div class="navbar-logo navbar-fullwidth-logo">
+                                <a class="navbar-logo-link" href="tmp/index.html">
+                                </a>
+                            </div>
+                            <div class="text-block text-block-2 d-md-flex align-items-center justify-content-center">
+                                <div class="list list-icons-2">
+                                    <div class="list-item">
+                                        {% if username == None%}
+                                            <a class="navbar-navigation-root-link" style="display: inline-block; " href="/login">
+                                                <span id="username" class="mdi-account-outline" style="display: inline-block"> Log in </span>
+                                            </a>
+                                            <a class="navbar-navigation-root-link" style="display: inline-block; " href="/logout">
+                                                <span id="username" class="mdi-logout" style="display: inline-block"> Log out </span>
+                                            </a>
+
+                                        {% else %}
+                                            <a class="navbar-navigation-root-link" style="display: inline-block; " href="/user_info">
+                                                <span id="username" class="mdi-account" style="display: inline-block"> {{ username }} </span>
+                                            </a>
+                                            <a class="navbar-navigation-root-link" style="display: inline-block; " href="/logout">
+                                                <span id="username" class="mdi-logout" style="display: inline-block"> Log out </span>
+                                            </a>
+
+                                        {% end %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="navbar-cell">
+                        <div class="navbar-subpanel">
+                            <div class="navbar-subpanel-item">
+                                <button class="navbar-button navbar-info-button mdi-dots-vertical novi-icon"
+                                        data-multi-switch='{"targets":".rd-navbar","scope":".rd-navbar","class":"navbar-info-active","isolate":"[data-multi-switch]"}'></button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-section">
+                <div class="navbar-container navbar-sidebar" style="margin-top: 1%">
+                    <div class="navbar-cell flex-grow-1" style="border-bottom: 1px solid #dde0e9;">
+                        <ul class="navbar-navigation rd-navbar-nav" style="margin-left: 58px">
+                            <li class="navbar-navigation-root-item active" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/">
+                                    <span class="product-btn btn topaz btn-icon mdi-home" style="display: inline-block; border: 1px solid white;">
+                                        <span> Home </span>
+                                    </span>
+                                </a>
+                            </li>
+                            {% if is_admin == 1 %}
+                                <li class="navbar-navigation-root-item rd-navbar--has-dropdown rd-navbar-submenu" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/create_user">
+                                    <span class="product-btn btn topaz btn-icon mdi-cake"  style="display: inline-block; border: 1px solid white;"> 用户管理 </span>
+                                </a><span class="rd-navbar-submenu-toggle"></span>
+                                <ul class="navbar-navigation-dropdown rd-navbar-dropdown">
+                                    <li class="navbar-navigation-back">
+                                        <button class="navbar-navigation-back-btn">Back</button>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/create_user">
+                                            <span class="mdi-account-multiple-plus" style="display: inline-block; ">  创建新用户 </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/update_permission">
+                                            <span class="mdi-clipboard-account" style="display: inline-block; "> 用户权限管理  </span>
+                                        </a>
+
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/reset_password">
+                                            <span class="mdi-key-change" style="display: inline-block; "> 用户密码重置  </span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                                </li>
+                            {% end %}
+
+                            {%if is_admin == 2%}
+                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">
+                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/upload_file">
+                                        <span class="product-btn btn topaz btn-icon " style="display: inline-block; border: 1px solid white;">
+                                            <span class="mdi-upload" style="font-size: 21px;"></span>
+                                            <span style="margin-left: 1px"> 上传资源 </span>
+                                        </span>
+                                    </a>
+                                </li>
+
+                            {% end %}
+
+                            {% if is_admin == 1 or is_admin == 2%}
+
+                                <li class="navbar-navigation-root-item rd-navbar--has-dropdown rd-navbar-submenu" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/file_list">
+                                    <span class="product-btn btn topaz btn-icon mdi-package" style="display: inline-block; border: 1px solid white;">
+                                        文件管理
+                                    </span>
+
+                                </a>
+                                <span class="rd-navbar-submenu-toggle"></span>
+                                <ul class="navbar-navigation-dropdown rd-navbar-dropdown">
+                                    <li class="navbar-navigation-back">
+                                        <button class="navbar-navigation-back-btn">Back</button>
+                                    </li>
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/pending_list">
+                                            <span class="mdi-checkbox-marked-circle-outline" style="display: inline-block; ">
+                                                待审核文件
+                                                <span id="pending_file1" class="tag tag-tertiary " style="display: none; font-size:12px; border-radius: 80%; height:26px; width: auto; line-height: 0.8">
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/file_list">
+                                             <span class="mdi-view-list" style="display: inline-block; "> 所有资源列表  </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/manage_files">
+{#                                            linearicons-box#}
+                                             <span class="linearicons-file-code" style="display: inline-block; "></span>
+                                            <span style="display: inline-block; margin-left: -1px"> 文件批量管理  </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/download_record">
+{#                                            note book#}
+                                             <span class="mdi-format-list-numbers" style="display: inline-block;  ">  </span>
+                                            <span style="display: inline-block;">资源下载记录 </span>
+
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+
+                                <li class="navbar-navigation-root-item rd-navbar--has-dropdown rd-navbar-submenu" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/upload_file">
+                                    <span class="product-btn btn topaz btn-icon mdi-book" style="display: inline-block; border: 1px solid white">
+                                        我的资源
+                                    </span>
+                                </a><span class="rd-navbar-submenu-toggle"></span>
+                                <ul class="navbar-navigation-dropdown rd-navbar-dropdown">
+                                    <li class="navbar-navigation-back">
+                                        <button class="navbar-navigation-back-btn">Back</button>
+                                    </li>
+{##}
+{#                                    <li class="navbar-navigation-dropdown-item">#}
+{#                                        <a class="navbar-navigation-dropdown-link" href="/upload_file">#}
+{#                                             <span class="mdi-upload" style="display: inline-block; ">#}
+{##}
+{#                                             </span>#}
+{#                                            <span style="display: inline-block"> 上传文件 </span>#}
+{#                                        </a>#}
+{#                                    </li>#}
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/my_files">
+{#                                            <span class="linearicons-user" style="display: inline-block;font-size: 1.1rem;"> </span>#}
+{#                                            <span class="mdi-account" style="display: inline-block;font-size: 14px;margin-left: -20.6px;"> </span>#}
+                                            <span class="mdi-account-outline" style="display: inline-block; "> </span>
+                                            <span style="display: inline-block; margin-left: 2px">我的上传  </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/my_record">
+                                            <span class="mdi-download" style="display: inline-block; font-size: 16px;">   </span>
+                                            <span style="display: inline-block; margin-left: 2px">我的下载  </span>
+
+
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+
+                            {% else %}
+                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">
+                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/upload_file">
+                                        <span class="product-btn btn topaz btn-icon " style="display: inline-block; border: 1px solid white;">
+                                            <span class="mdi-cloud-upload" style="font-size: 21px;"></span>
+                                            <span style="margin-left: 1px"> 上传资源 </span>
+
+                                        </span>
+
+                                    </a>
+                                </li>
+                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">
+                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/file_list">
+                                        <span class="product-btn btn topaz btn-icon " style="display: inline-block; border: 1px solid white;">
+                                            <span class="mdi-check-all" style="font-size: 21px;"></span>
+                                            <span style="margin-left: 1px"> 文件列表 </span>
+                                        </span>
+                                    </a>
+                                </li>
+
+                                <li class="navbar-navigation-root-item rd-navbar--has-dropdown rd-navbar-submenu" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/my_files">
+                                    <span class="product-btn btn topaz btn-icon mdi-book" style="display: inline-block; border: 1px solid white">
+                                        我的资源
+                                    </span>
+                                </a><span class="rd-navbar-submenu-toggle"></span>
+                                <ul class="navbar-navigation-dropdown rd-navbar-dropdown">
+                                    <li class="navbar-navigation-back">
+                                        <button class="navbar-navigation-back-btn">Back</button>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/my_record">
+                                             <span class="mdi-download" style="display: inline-block; ">
+
+                                             </span>
+                                            <span style="display: inline-block"> 我的下载 </span>
+                                        </a>
+                                    </li>
+
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/my_files">
+                                             <span class="mdi-upload" style="display: inline-block; ">
+
+                                             </span>
+                                            <span style="display: inline-block"> 我的上传 </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/file_list">
+                                             <span class="mdi-file-document" style="display: inline-block; ">
+
+                                             </span>
+                                            <span style="display: inline-block"> 所有文件列表 </span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+
+
+
+{#                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">#}
+{#                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/">#}
+{#                                        <span class="product-btn btn topaz btn-icon mdi-download" style="display: inline-block; border: 1px solid white;">#}
+{#                                            <span> 我的下载 </span>#}
+{#                                        </span>#}
+{#                                    </a>#}
+{#                                </li>#}
+
+{#                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">#}
+{#                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/">#}
+{#                                        <span class="product-btn btn topaz btn-icon mdi-book" style="display: inline-block; border: 1px solid white;">#}
+{#                                            <span> 我的文件 </span>#}
+{#                                        </span>#}
+{#                                    </a>#}
+{#                                </li>#}
+
+
+                            {% end %}
+
+                            <li class="navbar-navigation-root-item" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/user_info">
+                                 <span class="product-btn btn topaz btn-icon mdi-account" style="display: inline-block; border: 1px solid white;"> 个人信息 </span>
+                                </a>
+                            </li>
+
+
+
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+{# Body  #}
+    <section class="section section-md bg-primary-lightest" style="">
+        <div class="container">
+            <div class="row row-40 row-content justify-content-center text-center">
+
+            <div class="col-md-8 col-lg-9">
+
+
+                <div id="f3" class="row justify-content-center text-center" style="margin-top: 6%;">
+                <div class="col-md-6" style="min-width: 96%;">
+                    <div class="box box-form-1 section-offset-item">
+                        <div class="box-header">
+                            <h3 class="box-title"> 选择上传文件 </h3>
+                        </div>
+                        <div class="box-body">
+                            <div id="form1" class="rd-form rd-mailform" data-form-output="contact-form-1" data-form-type="contact" novalidate="novalidate">
+                                <div class="row row-20 align-items-center">
+
+                                    <div class="col-11">
+                                        <div class="form-group">
+                                            <div class="form-control-wrap">
+                                                <div class="form-label topaz_title2" style=""> 选择文件: </div>
+
+                                                <input multiple id="file" name="viewfile" type="file" class="form-control form-control-has-validation form-control-last-child "
+                                                       placeholder="e.g. 飞天小女警.zip" style="display: inline-block; margin-top: 1%">
+                                                <span class="form-validation"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="rd-form-btn text-left">
+                                        <button  class="btn btn-lg btn-primary" type="submit" onclick="UploadFiles()">Upload</button>
+                                    <a class="btn btn-lg btn-primary" href="/"><span>Back</span></a>
+                                    </div>
+
+                                </div>
+                                <div class="rd-form-meta small">
+                                <p style="color: #26455561; font-size: 0.88rem;">
+                                    <span style="display: inline-block; ">Back Home: </span>
+                                    <a class="link " href="/" style="font-size: 0.98rem; margin-left: 1px">
+                                        FILE MANAGEMENT SYSTEM
+                                    </a>
+{#                        或 <a class="link " href="/feedback" style="font-size: 0.88rem;">扫码进群</a> 反馈#}
+                                </p>
+                    </div>
+
+                            </div>
+                        </div>
+                        <div class="form-output snackbar snackbar-primary" id="contact-form-1"></div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <section class="footer footer-dark context-dark bg-800" style="margin-top: 10%">
+        <div class="container">
+            <div class="row row-30">
+                <div class="col-sm-6 col-lg-3">
+                    <!-- Logo-->
+                    <div class="logo">
+                        <a class="logo-link" href="/">
+{#                            <img class="logo-image-default" src="/static/images/meowfile.png" alt="Airy" width="146" height="36">#}
+                            <img class="logo-image-inverse" src="/static/images/meowfile.png" alt="Airy" width="146" height="36">
+                        </a>
+                    </div>
+                    <p>Meow File is file management system for file sharing between different departments of the company. </p>
+                    <div class="social group-20">
+{#                        <a class="social-icon icon icon-md icon-link onclinic-instagram" href="#"></a>#}
+                    </div>
+            </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <h5 class="footer-title">Contacts</h5>
+                    <ul class="list list-icons">
+                        <li class="list-item">
+                            <div class="list-icon onclinic-map-marker"></div>
+                            ChaoYang, Beijing
+                        </li>
+                        <li class="list-item">
+                            <div class="list-icon onclinic-phone"></div>
+                            8615600803270
+                        </li>
+                        <li class="list-item">
+                            <div class="list-icon onclinic-email-open"></div>
+                            topaz1668@gmail.com
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <h5 class="footer-title">Useful Links</h5>
+                    <ul class="list list-sm">
+                      <li class="list-item"><a href="https://topaz1618.github.io/about/">About</a></li>
+                      <li class="list-item"><a href="https://topaz1618.github.io/projects/">Projects</a></li>
+                      <li class="list-item"><a href="https://topaz1618.github.io/blog/">Blog</a></li>
+                    </ul>
+                </div>
+
+
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer footer-minimal context-dark bg-900">
+        <div class="container">
+        </div>
+    </footer>
+</div>
+<!-- Preloader-->
+<div class="preloader">
+    <div class="preloader-inner">
+        <div class="preloader-dot"></div>
+        <div class="preloader-dot"></div>
+        <div class="preloader-dot"></div>
+        <div class="preloader-dot"></div>
+    </div>
+</div>
+
+<div class="to-top mdi-chevron-up "></div>
+</body>
+</html>
+<script src="/static/components/base/core.min.js"></script>
+<script src="/static/components/base/script.js"></script>
+<script src="/static/js/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/spark-md5/2.0.2/spark-md5.min.js"></script>
+<script type="text/javascript">
+    var shop_header = document.getElementById("shop_header");
+    var shop_title = document.getElementById("shop_title");
+    {#var BlockSize = 1024 * 1024 * 10;#}
+    var BlockSize = 1024 * 1024;
+
+    var admin_user = "15600803270";
+
+    function sleep(ms){
+        return new Promise((resolve)=>setTimeout(resolve,ms));
+    }
+
+    async function test(){
+        var temple=await sleep(1000);
+        console.log(1111);
+        return temple;
+    }
+
+    function ContorlTag(element) {
+        if (element.name == "pause"){
+            var res = confirm("确认暂停上传？");
+            if (res == true){
+                element.parentElement.children[0].value = "false";
+                element.style.display = "none";
+                element.nextElementSibling.style.display= "inline-block";
+            }
+
+        }else if(element.name == "play"){
+
+            element.style.display = "none";
+            element.previousElementSibling.style.display= "inline-block";
+
+            element.parentElement.children[0].value = "true";
+            var num = parseInt(element.parentNode.id.split("_")[1]);
+            var file_el = document.getElementById("file");
+            var file = file_el.files[num];
+            Upload(file, num);
+        }
+
+    }
+
+    function S4() {
+        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    }
+
+    function guid() {
+        return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+    }
+
+
+    function ShowShadow(){
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+        document.getElementById("modal").style.display = "block";
+        document.getElementById("cover").style.display = "block";
+    }
+
+    function HideShadow(){
+        {#document.getElementById("modal").style.display = "";#}
+        {#document.getElementById("cover").style.display = "";#}
+        window.location.reload();
+
+    }
+
+    function CreateFileList(file_list) {
+        var list_el = document.getElementById("file_list");
+        var li_model = document.getElementById("li_model");
+        list_el.innerText = "";
+        for (let i=0; i< file_list.files.length; i++){
+            var li_ele = li_model.cloneNode(true);
+            li_ele.id = "file_" + i;
+            li_ele.style.display = "inline-block";
+            li_ele.children[1].innerText = file_list.files[i].name;
+            list_el.appendChild(li_ele);
+        }
+    }
+
+
+    function SmallFile(file) {
+        const fileReader = new FileReader();
+        fileReader.readAsBinaryString(file);
+        fileReader.onload = e => {
+        const md5 = SparkMD5.hashBinary(e.target.result);
+            console.log(">>>", md5);
+        }
+    }
+
+
+    function CalculateMd5(file, num, chunkSize) {
+        document.getElementById("md5_info").style.display = "inline-block";
+        document.getElementById("md5_process").innerHTML = "";
+        return new Promise((resolve, reject) => {
+            let blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
+            let chunks = Math.ceil(file.size / chunkSize);
+            let currentChunk = 0;
+            let spark = new SparkMD5.ArrayBuffer();
+            let fileReader = new FileReader();
+
+			fileReader.onload = function(e) {
+			    console.log("stop", num);
+			    if (document.getElementsByName("pause")[num].style.display != "none"){
+				spark.append(e.target.result);
+				currentChunk++;
+				if (currentChunk < chunks) {
+					loadNext();
+
+                    let percent  = (currentChunk / chunks) * 100;
+                    percent = percent.toFixed(2);
+
+                    document.getElementById("md5_process").innerHTML += "<br/>" + "[" +file.name + "] md5 值计算中: " + percent + "%";
+                    document.getElementById("md5_info").scrollTop = document.getElementById("md5_info").scrollHeight;
+                    {#document.getElementById("md5_process").innerText = file.name + percent + "%";#}
+
+				} else {
+					let md5 = spark.end();
+                    document.getElementById("md5_info").style.display = "none";
+					resolve(md5);
+				}
+                }
+
+			};
+
+			fileReader.onerror = function(e) {
+				reject(e);
+			};
+
+			function loadNext() {
+				let start = currentChunk * chunkSize;
+				let end = start + chunkSize;
+				if (end > file.size){
+					end = file.size;
+				}
+				fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
+			}
+            loadNext();
+        });
+    }
+
+    async function UploadWorker(file, md5, check_data, num){
+        var defer = $.Deferred();
+        var log_info_el = document.getElementById("log_info");
+        var blockSize = BlockSize;
+        var filename = file.name;
+        var count = 0;
+        var idx = 0;
+
+        var r_start = check_data["current_pos"];
+        var slice_list = check_data["slice_list"];
+
+        var total_chunk = Math.ceil(file.size / blockSize);
+        var file_uuid = guid();
+
+        log_info_el.style.display = "inline-block";
+        log_info_el.innerHTML += "<br/>" + "Loginfo: 开始上传" + filename + "文件切片到服务器 ... ";
+        log_info_el.scrollTop = log_info_el.scrollHeight;
+
+        if (r_start > 0){
+        //    count = parseInt(r_start / blockSize);
+            idx = parseInt(r_start / blockSize);
+            let percent  = (idx / total_chunk) * 100;
+            percent = percent.toFixed(2);
+            document.getElementById("file_list").children[num].children[2].innerText = percent + "%";
+        }
+
+        for (let start = 0; start < file.size; start += blockSize) {
+            count += 1;
+
+            var end;
+            if (start + blockSize > file.size) {
+                end = file.size;
+            } else {
+                end = start + blockSize;
+
+            }
+            {#await sleep(10);#}
+
+            const chunk = file.slice(start, end);
+            console.log(chunk);
+            console.log(count, '/', total_chunk, start, end);
+            var self_el = document.getElementById("file_list").children[num].children;
+            var flag = self_el[0].value;
+            {#log_info_el.innerHTML += "<br/>" + "Loginfo: [" + filename +  "] 上传切片到服务器: " + count + "/" + total_chunk + " [已完成]";#}
+            {#log_info_el.scrollTop = log_info_el.scrollHeight;#}
+            if (count >= total_chunk){
+                log_info_el.innerHTML += "<br/>" + "Loginfo: 文件 [" + filename +"] 切片已全部上传到服务器，等待服务器处理中 ......";
+                log_info_el.scrollTop = log_info_el.scrollHeight;
+                document.getElementById("file_list").children[num].children[3].style.display = "none"
+            }
+
+            console.log("Flag:", flag, "Slice Exists: ", slice_list.indexOf(count));
+            if (flag == "true" && slice_list.indexOf(count) == -1){
+                console.log("!!!!!!!! Go upload: ", count, filename);
+                const formData = new FormData();
+                formData.append("file", chunk);
+                formData.append("md5", md5);
+                formData.append("filesize", file.size);
+                formData.append("filename", filename);
+                formData.append("media_type", 1);
+                formData.append("count", count);
+                formData.append("total_chunk", total_chunk);
+                formData.append("uuid", file_uuid);
+
+                $.ajax({
+                type: "post",
+                url: "/upload_file",
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    console.log(res);
+                    idx += 1;
+
+                    if (document.getElementById("file_list").children[num].children[0].value == "true"){
+                        console.log("update precent ");
+                        let percent  = (idx / total_chunk) * 100;
+                        percent = percent.toFixed(2);
+                        self_el[2].innerText = percent + "%";
+                        log_info_el.innerHTML += "<br/>" + "Loginfo: [" + filename +  "] 数据切片: " + idx + "/" + total_chunk + " [服务器处理已完成]";
+                        log_info_el.scrollTop = log_info_el.scrollHeight;
+                    }else{
+                        console.log(">>>>> [Result of upload]: ", percent)
+                    }
+
+
+                    console.log("Done count:" + idx);
+                    if (idx >= total_chunk || res == "success"){
+                        defer.resolve(true);
+                        if (total_chunk > 1) {
+                            console.log("win");
+                            const formData = new FormData();
+                            formData.append("merge", true);
+                            formData.append("filename", filename);
+                            formData.append("total_chunk", total_chunk);
+                            formData.append("uuid", file_uuid);
+                            formData.append("md5", md5);
+                            $.ajax({
+                                url: "/merge_file",
+                                type: "POST",
+                                data: formData,
+                                async: false,
+                                processData: false,
+                                contentType: false,
+                                success: function (response) {
+                                    if (response == "false") {
+                                        {#return setTimeout("notify_merge();", 500);#}
+                                        return false;
+                                    }
+                                    else {
+                                        return true
+                                    }
+                                }
+                            });
+
+                        }
+
+                        return "!!! All ok" + idx;
+                    }
+                }
+            });
+
+            }
+
+            console.log("???? flag", flag);
+
+        }
+
+        return defer.promise();
+    }
+
+
+    function Upload(file, num){
+        var filename = file.name;
+        CalculateMd5(file, num, BlockSize*2).then(md5_sum => {
+			console.log("md5=" + md5_sum);
+            const formData = new FormData();
+            formData.append("md5_sum", md5_sum);
+            formData.append("filename", filename);
+            formData.append("blocksize", BlockSize);
+            $.ajax({
+                url: "/check_file_exists",
+                type: "POST",
+                data: formData,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log("!!!!!!!!", response);
+                    if(response["error_code"] == "0"){
+                        // Todo: 记录存在且二次校验文件 md5 一致，创建新纪录. 显示进度 100 %
+                        {#alert("!!! Already exists");#}
+                        document.getElementById("file_list").children[num].children[2].innerText = "100.00%";
+
+
+                    }else if(response["error_code"] == "1"){
+                        var data = response["msg"];
+                        console.log("current_pos", data["current_pos"]);
+                        UploadWorker(file, md5_sum, data, num);
+
+                    }else{
+                        {#alert("Upload file from 0", response["msg"]);#}
+                        var data = response["msg"];
+                        UploadWorker(file, md5_sum, data, num);
+                    }
+                }
+            });
+            return md5_sum;
+        }).catch(md5_sum => {
+            console.error(md5_sum);
+        });
+    }
+
+    function UploadFiles() {
+        var file_el = document.getElementById("file");
+        if (file_el.files.length == 0){
+            alert("请选择文件");
+            return
+        }
+        CreateFileList(file_el);
+        ShowShadow();
+
+        for (let i=0; i < file_el.files.length; i++){
+            var file = file_el.files[i];
+            Upload(file, i);
+        }
+    }
+
+    timer = setInterval((function target () {
+
+        var file_list = document.getElementById("file_list").children;
+
+        var done_count = 0;
+
+        for(let i=0; i < file_list.length; i++){
+            var present = file_list[i].children[2].innerText;
+            if (parseInt(present)==100){
+                file_list[i].children[3].style.display = "none";
+                file_list[i].children[4].style.display = "none";
+                done_count +=1;
+            }
+        }
+
+        if (file_list.length >0 && done_count == file_list.length){
+            document.getElementById("upload_info").innerText = "文件已全部上传完成 ... ";
+            {#setTimeout("window.location.reload()", 2888);#}
+        }else{
+            return target
+        }
+
+    })(), 1000);
+
+
+    {#var shop_phone = document.getElementById("shop_phone");#}
+    var option = {
+        attributes: true,
+        attributeFilter: ['class']
+    };
+
+
+    var mutationObserver = new MutationObserver(function (mutations) {
+        if (shop_header.className.indexOf('rd-navbar-fixed') != -1) {
+            shop_title.style.display = "None";
+            {#shop_phone.style.display = "Block";#}
+        } else {
+            shop_title.style.display = "Block";
+            {#shop_phone.style.display = "None";#}
+
+        }
+    });
+
+    mutationObserver.observe(shop_header, option)
+
+</script>

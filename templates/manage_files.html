@@ -1,0 +1,1048 @@
+<!--Copyright: "Copyright (c) 2021 HangYan"-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>File management system</title>
+    {#    <meta charset="utf-8">#}
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="Template Monster Admin Template">
+    <meta property="og:description"
+          content="brevis, barbatus clabulares aliquando convertam de dexter, peritus capio. devatio clemens habitio est.">
+
+    <link rel="stylesheet" href="/static/components/base/base.css">
+    <style>
+        .btn.topaz {
+        {#border-top-left-radius: 20px !important;#} border-top-right-radius: 60px;
+            border-bottom-right-radius: 60px;
+            border-bottom-left-radius: 60px;
+        }
+
+        .btn.topaz:hover {
+        {#background-color: #264555;#}{#color: #1c54e2;#}
+        }
+
+        .tbtn{
+            color: red;
+        }
+
+        .tbtn:hover{
+            color: #a4bbf9;
+        }
+
+
+        .custom-control-text.topaz_text {
+            color: #264555
+        }
+
+        .link-inherit.topaz_link:hover {
+            color: #6c757d;
+        }
+
+        .table.thead.th.topaz_t{
+            font-size: 0.88rem;
+            font-weight: 600;
+            border-color:#f6f7f9;
+            border-right: 2px solid #fff;
+            background-color: #a4bbf9;
+            color: #fff;
+        }
+
+        ::-webkit-scrollbar-thumb:horizontal { /*水平滚动条的样式*/
+        	width: 5px;
+        	background-color: #CCCCCC;
+            {#background-color: #a4bbf9;#}
+        	-webkit-border-radius: 6px;
+        }
+        ::-webkit-scrollbar-track-piece {
+        	background-color: #fff; /*滚动条的背景颜色*/
+        	-webkit-border-radius: 0; /*滚动条的圆角宽度*/
+        }
+        ::-webkit-scrollbar {
+        	width: 10px; /*滚动条的宽度*/
+        	height: 8px; /*滚动条的高度*/
+        }
+        ::-webkit-scrollbar-thumb:vertical { /*垂直滚动条的样式*/
+        	height: 50px;
+        	background-color: #999;
+        	-webkit-border-radius: 4px;
+        	outline: 2px solid #fff;
+        	outline-offset: -2px;
+        	border: 2px solid #fff;
+        }
+
+        ::-webkit-scrollbar-thumb:hover { /*滚动条的hover样式*/
+        	height: 50px;
+        	{#background-color: #9f9f9f;#}
+            background-color:  #a4bbf9;
+        	-webkit-border-radius: 4px;
+        }
+
+        #modal{
+            position:absolute;
+            width:500px;
+            height:auto;
+            top:56%;
+            left:28%;
+            background-color:#fff;
+            display:none;
+            cursor:pointer;
+            z-Index:9999;
+            color: #264555;
+            font-size: 26px;
+            box-shadow: 0px 34px 40px rgba(38, 69, 85, 0.06);
+            padding: 1.18125rem 1.75rem;
+        }
+
+        #topaz_info{
+
+        }
+
+    </style>
+</head>
+<body>
+    <div id="modal"  style=" border: 2px solid #f2f2f2; border-radius: 10px ">
+        <div class="title-1 text-md-center" style="font-size: 22px; margin-top: 18px; color: #a4bbf9;">
+            <span class="mdi-checkbox-marked-circle-outline" style="font-size: 2.2rem; color: #1c54e2">
+                <span id="review_text" style="color:#a4bbf9; font-size: 18px "></span>
+            </span>
+        </div>
+        <button class="btn btn-lg btn-primary" onclick="FreshPage()" style="height: 39px; max-width: 69px; min-width: 86px; font-size: 12px; margin-top: 8px; border: 1px solid #d4d4d9c7; border-top-left-radius: 60px !important; float: right;">
+            确&nbsp;认
+        </button>
+    </div>
+
+<div class="page">
+    <!--RD Navbar-->
+
+    <header class="section rd-navbar-wrap rd-navbar-wrap-transparent">
+        <nav id="shop_header" class="rd-navbar rd-navbar-solid rd-navbar-transparent"
+             data-rd-navbar='{"responsive":{"1200":{"stickUpOffset":"164px"}}}'>
+            <div class="navbar-section navbar-non-stuck">
+                <div class="navbar-panel">
+                    <button class="navbar-switch mdi-menu novi-icon"
+                            data-multi-switch='{"targets":".rd-navbar","scope":".rd-navbar","isolate":"[data-multi-switch]"}'></button>
+                    <div class="navbar-logo">
+                        <a class="navbar-navigation-root-link" href="/" style="width: 160%; font-size: 22px; font-weight: 500; margin-top: -4%;">
+{#                            Meow File #}
+                            <img style="max-height: 82px; margin-top: -16px;" src="/static/images/meowfile.png" alt="Airy" width="260" height="26">
+
+                        </a>
+                    </div>
+                </div>
+                <div class="navbar-container">
+                    <div class="navbar-cell flex-grow-1">
+                        <div class="navbar-info">
+                            <div class="list list-icons-2">
+                                <div class="list-item">
+                                    <li class="navbar-navigation-root-item">
+                                        <a id="shop_title" class="navbar-navigation-root-link" href="/"
+                                           style="font-size: 28px; font-weight: 500;">
+{#                                            文件管理系统#}
+                                            <img style="max-height: 82px; " src="/static/images/meowfile.png" alt="Airy" width="260" height="26">
+
+
+                                        </a>
+                                    </li>
+                                </div>
+                            </div>
+                            <div class="navbar-logo navbar-fullwidth-logo">
+                                <a class="navbar-logo-link" href="tmp/index.html">
+                                </a>
+                            </div>
+                            <div class="text-block text-block-2 d-md-flex align-items-center justify-content-center">
+                                <div class="list list-icons-2">
+                                    <div class="list-item">
+                                        {% if username == None%}
+                                            <a class="navbar-navigation-root-link" style="display: inline-block; " href="/login">
+                                                <span id="username" class="mdi-account-outline" style="display: inline-block"> Log in </span>
+                                            </a>
+                                            <a class="navbar-navigation-root-link" style="display: inline-block; " href="/logout">
+                                                <span id="username" class="mdi-logout" style="display: inline-block"> Log out </span>
+                                            </a>
+
+                                        {% else %}
+                                            <a class="navbar-navigation-root-link" style="display: inline-block; " href="/user_info">
+                                                <span id="username" class="mdi-account" style="display: inline-block"> {{ username }} </span>
+                                            </a>
+                                            <a class="navbar-navigation-root-link" style="display: inline-block; " href="/logout">
+                                                <span id="username" class="mdi-logout" style="display: inline-block"> Log out </span>
+                                            </a>
+
+                                        {% end %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="navbar-cell">
+                        <div class="navbar-subpanel">
+                            <div class="navbar-subpanel-item">
+                                <button class="navbar-button navbar-info-button mdi-dots-vertical novi-icon"
+                                        data-multi-switch='{"targets":".rd-navbar","scope":".rd-navbar","class":"navbar-info-active","isolate":"[data-multi-switch]"}'></button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-section">
+                <div class="navbar-container navbar-sidebar" style="margin-top: 1%">
+                    <div class="navbar-cell flex-grow-1" style="border-bottom: 1px solid #dde0e9;">
+                        <ul class="navbar-navigation rd-navbar-nav" style="margin-left: 58px">
+                            <li class="navbar-navigation-root-item active" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/">
+                                    <span class="product-btn btn topaz btn-icon mdi-home" style="display: inline-block; border: 1px solid white;">
+                                        <span> Home </span>
+                                    </span>
+                                </a>
+                            </li>
+                            {% if is_admin == 1 %}
+                                <li class="navbar-navigation-root-item rd-navbar--has-dropdown rd-navbar-submenu" style="margin-left: -58px; width: 286px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/create_user">
+                                    <span class="product-btn btn topaz btn-icon mdi-cake"  style="display: inline-block; border: 1px solid white;"> User Management </span>
+                                </a><span class="rd-navbar-submenu-toggle"></span>
+                                <ul class="navbar-navigation-dropdown rd-navbar-dropdown">
+                                    <li class="navbar-navigation-back">
+                                        <button class="navbar-navigation-back-btn">Back</button>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item" >
+                                        <a class="navbar-navigation-dropdown-link" href="/create_user">
+                                            <span class="mdi-account-multiple-plus" style="display: inline-block; "> Create New User </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/update_permission">
+                                            <span class="mdi-clipboard-account" style="display: inline-block; "> User Authority Management  </span>
+                                        </a>
+
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/reset_password">
+                                            <span class="mdi-key-change" style="display: inline-block; "> Reset Password   </span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                                </li>
+                            {% end %}
+
+                            {%if is_admin == 2%}
+                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">
+                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/upload_file">
+                                        <span class="product-btn btn topaz btn-icon " style="display: inline-block; border: 1px solid white;">
+                                            <span class="mdi-upload" style="font-size: 21px;"></span>
+                                            <span style="margin-left: 1px"> Upload Resources</span>
+                                        </span>
+                                    </a>
+                                </li>
+
+                            {% end %}
+
+                            {% if is_admin == 1 or is_admin == 2%}
+
+                                <li class="navbar-navigation-root-item rd-navbar--has-dropdown rd-navbar-submenu" style="width: 276px;margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/file_list">
+                                    <span class="product-btn btn topaz btn-icon mdi-package" style="display: inline-block; border: 1px solid white;">
+                                        File Management
+                                    </span>
+
+                                </a>
+                                <span class="rd-navbar-submenu-toggle"></span>
+                                <ul class="navbar-navigation-dropdown rd-navbar-dropdown">
+                                    <li class="navbar-navigation-back">
+                                        <button class="navbar-navigation-back-btn">Back</button>
+                                    </li>
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/pending_list">
+                                            <span class="mdi-checkbox-marked-circle-outline" style="display: inline-block; ">
+                                                Review Resources
+                                                <span id="pending_file1" class="tag tag-tertiary " style="display: none; font-size:12px; border-radius: 80%; height:26px; width: auto; line-height: 0.8">
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/file_list">
+                                             <span class="mdi-view-list" style="display: inline-block; "> All Resources List  </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/manage_files">
+{#                                            linearicons-box#}
+                                             <span class="linearicons-file-code" style="display: inline-block; "></span>
+                                            <span style="display: inline-block; margin-left: -1px"> Batch Management  </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/download_record">
+{#                                            note book#}
+                                             <span class="mdi-format-list-numbers" style="display: inline-block;  ">  </span>
+                                            <span style="display: inline-block;"> Resource Download Record </span>
+
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+
+                                <li class="navbar-navigation-root-item rd-navbar--has-dropdown rd-navbar-submenu" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/upload_file">
+                                    <span class="product-btn btn topaz btn-icon mdi-book" style="display: inline-block; border: 1px solid white">
+                                       My Files
+                                    </span>
+                                </a><span class="rd-navbar-submenu-toggle"></span>
+                                <ul class="navbar-navigation-dropdown rd-navbar-dropdown">
+                                    <li class="navbar-navigation-back">
+                                        <button class="navbar-navigation-back-btn">Back</button>
+                                    </li>
+{##}
+{#                                    <li class="navbar-navigation-dropdown-item">#}
+{#                                        <a class="navbar-navigation-dropdown-link" href="/upload_file">#}
+{#                                             <span class="mdi-upload" style="display: inline-block; ">#}
+{##}
+{#                                             </span>#}
+{#                                            <span style="display: inline-block"> 上传文件 </span>#}
+{#                                        </a>#}
+{#                                    </li>#}
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/my_files">
+{#                                            <span class="linearicons-user" style="display: inline-block;font-size: 1.1rem;"> </span>#}
+{#                                            <span class="mdi-account" style="display: inline-block;font-size: 14px;margin-left: -20.6px;"> </span>#}
+                                            <span class="mdi-account-outline" style="display: inline-block; "> </span>
+                                            <span style="display: inline-block; margin-left: 2px"> My Upload  </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/my_record">
+                                            <span class="mdi-download" style="display: inline-block; font-size: 16px;">   </span>
+                                            <span style="display: inline-block; margin-left: 2px"> My Download  </span>
+
+
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+
+                            {% else %}
+                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">
+                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/upload_file">
+                                        <span class="product-btn btn topaz btn-icon " style="display: inline-block; border: 1px solid white;">
+                                            <span class="mdi-cloud-upload" style="font-size: 21px;"></span>
+                                            <span style="margin-left: 1px"> Upload Resources </span>
+
+                                        </span>
+
+                                    </a>
+                                </li>
+                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">
+                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/file_list">
+                                        <span class="product-btn btn topaz btn-icon " style="display: inline-block; border: 1px solid white;">
+                                            <span class="mdi-check-all" style="font-size: 21px;"></span>
+                                            <span style="margin-left: 1px"> 文件列表 </span>
+                                        </span>
+                                    </a>
+                                </li>
+
+                                <li class="navbar-navigation-root-item rd-navbar--has-dropdown rd-navbar-submenu" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/my_files">
+                                    <span class="product-btn btn topaz btn-icon mdi-book" style="display: inline-block; border: 1px solid white">
+                                        我的资源
+                                    </span>
+                                </a><span class="rd-navbar-submenu-toggle"></span>
+                                <ul class="navbar-navigation-dropdown rd-navbar-dropdown">
+                                    <li class="navbar-navigation-back">
+                                        <button class="navbar-navigation-back-btn">Back</button>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/my_record">
+                                             <span class="mdi-download" style="display: inline-block; ">
+
+                                             </span>
+                                            <span style="display: inline-block"> 我的下载 </span>
+                                        </a>
+                                    </li>
+
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/my_files">
+                                             <span class="mdi-upload" style="display: inline-block; ">
+
+                                             </span>
+                                            <span style="display: inline-block"> 我的上传 </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/file_list">
+                                             <span class="mdi-file-document" style="display: inline-block; ">
+
+                                             </span>
+                                            <span style="display: inline-block"> 所有文件列表 </span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+
+
+
+{#                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">#}
+{#                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/">#}
+{#                                        <span class="product-btn btn topaz btn-icon mdi-download" style="display: inline-block; border: 1px solid white;">#}
+{#                                            <span> 我的下载 </span>#}
+{#                                        </span>#}
+{#                                    </a>#}
+{#                                </li>#}
+
+{#                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">#}
+{#                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/">#}
+{#                                        <span class="product-btn btn topaz btn-icon mdi-book" style="display: inline-block; border: 1px solid white;">#}
+{#                                            <span> 我的文件 </span>#}
+{#                                        </span>#}
+{#                                    </a>#}
+{#                                </li>#}
+
+
+                            {% end %}
+
+                            <li class="navbar-navigation-root-item" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/user_info">
+                                 <span class="product-btn btn topaz btn-icon mdi-account" style="display: inline-block; border: 1px solid white;"> My Account </span>
+                                </a>
+                            </li>
+
+
+
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="section section-md  text-center">
+        <div class="container">
+            <div class="text-block">
+                <div class="title-1"><a class="link link-inherit topaz_link" href="#">File management system</a></div>
+                <h2> File Batch Management </h2>
+
+            </div>
+
+            <div class="container tab">
+                <ul class="nav nav-line justify-content-center active" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link h6 active" data-toggle="tab" href="#navLine3-1" role="tab"
+                           aria-selected="true">All Files</a>
+                    </li>
+
+                </ul>
+
+                <div class="tab-content" style="">
+                    <div class="tab-pane fade active show" id="navLine3-1" role="tabpanel">
+
+                        {% if page_info["is_admin"] == 1 or page_info["is_admin"] == 2 %}
+                            <div class="product-search-inner" style="width: 200px; float: left;     margin-top: -2%; margin-bottom: 1%;     background-color: white;">
+                          <div class="product-search-form form-group select-wrap" style="    background-color: white;">
+                            <select id="file_selector"  class="select2" name="file_type" data-select2-options='{"placeholder":"All files"}' onChange="SelectFiles()" style="    background-color: white;">
+                                {% if page_info["is_select"] == 3 %}
+                                    <option label="placeholder">&nbsp;&nbsp;---&nbsp; All files&nbsp;---&nbsp;&nbsp;</option>
+                                    <option value="1">Review passed</option>
+                                    <option value="0">Pending Review</option>
+                                    <option value="2">Review failed</option>
+
+                                {% elif page_info["is_select"] == 0 %}
+                                    <option label="placeholder"> &nbsp;&nbsp;---&nbsp;Pending Review&nbsp;---&nbsp;&nbsp;</option>
+                                    <option value="3">All files</option>
+                                    <option value="1">Review passed</option>
+                                    <option value="2">Review failed</option>
+
+
+                                {% elif page_info["is_select"] == 1 %}
+                                    <option label="placeholder"> &nbsp;&nbsp;---&nbsp;Review passed&nbsp;---&nbsp;&nbsp;</option>
+                                    <option value="3">All files</option>
+                                    <option value="0">Pending Review</option>
+                                    <option value="2">Review failed</option>
+
+
+                                {% elif page_info["is_select"] == 2 %}
+                                    <option label="placeholder"> &nbsp;&nbsp;---&nbsp;Review failed&nbsp;---&nbsp;&nbsp;</option>
+                                    <option value="3">All files</option>
+                                    <option value="1">Review passed</option>
+                                    <option value="0">Pending Review</option>
+                            {% end %}
+                            </select>
+                          </div>
+                        </div>
+                        {% end %}
+
+                        <div style="float: right; margin-top: -2%; opacity: .5; line-height: 3.8; margin-right: 28px;">
+                            <button class="link" onclick="ChoiceAll()" style="color:#1c54e2; font-size: 12px;  text-decoration: underline">Select all</button>
+                            <button class="link" onclick="CancelAll()" style="color:#1c54e2; font-size: 12px;   margin-left:10px; text-decoration: underline">Unselect all</button>
+                            <button class="link" onclick="DeleteFiles()" style="color:#1c54e2; font-size: 12px;   margin-left:10px; text-decoration: underline">confirm deletion</button>
+
+                        </div>
+
+                        <div class="product-search-results" style="float: right; margin-top: -2%; opacity: .5; line-height: 3.8; margin-right: 28px;">
+                            Showing {{ page_info["start"] + 1 }}-{{ page_info["end"] }} of {{ page_info["total_data"] }}
+                            results
+                        </div>
+
+
+                        <div class="table-responsive" >
+                            <table class="table table-1">
+                                <thead  style="background-color: #a4bbf9">
+                                <tr style="font-size: 0.88rem;">
+                                    <th class="table thead th topaz_t" style=" width: 200px; min-width: 200px;">File Name</th>
+                                    <th class="table thead th topaz_t" style=" min-width: 116px">Uploader</th>
+                                    <th class="table thead th topaz_t" style=" width: 200px; min-width: 200px;">Update Date</th>
+                                    <th class="table thead th topaz_t" style=" min-width: 160px">Download Times</th>
+                                    <th class="table thead th topaz_t" style=" min-width: 160px">Review Status</th>
+                                    {% if page_info["is_select"] == 2 or page_info["is_select"] == 0 %}
+                                        <th class="table thead th topaz_t" style=" min-width: 128px">
+                                            <span>
+                                                Review Management
+                                                <span class="icon blurb-icon linearicons-question-circle" onmousedown="ShowInfo()"></span>
+                                            </span>
+                                            <span id="tag" style="display: none; font-weight: 100; margin-left: 12px;box-shadow: rgba(108, 117, 125, 0.1) 0px 14px 14px;position: absolute;background-color: rgb(255, 255, 255);font-size: 11px;height: 49px; width: 198px; line-height: 23px;color: #adb5cd;border-radius: 20px;border: 1px solid #6c757d1f;">
+                                                Click [Restore], the file will be removed from the list of [Review failed] and restored to the state of [Pending Review]
+                                            </span>
+                                        </th>
+
+                                    {% end %}
+
+                                    <th class="table thead th topaz_t" style="width: 160px; min-width: 148px">Batch Deletion</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for file in data %}
+                                <tr id="{{ file["id"] }}" style="line-height: 0;">
+
+                                    <td class="h6" style="  min-width: 200px;" >
+                                        <a href="/download_file?fid={{ file["id"] }}" style="" onmouseover="ShowTag({{ file["id"] }})">{{ file["name"] }}</a>
+                                        <span id="info_tag_{{ file["id"] }}" style="display: none; margin-top: 6px;box-shadow: rgba(108, 117, 125, 0.1) 0px 14px 14px;position: absolute;background-color: rgb(255, 255, 255);font-size: 12px;width: 116px; line-height: 22px;color: #a4bbf9;border-radius: 20px;border: 1px solid ;">
+                                            Click to download
+                                        </span>
+                                    </td>
+                                    <td class="h6" style="min-width: 200px;">{{ file["user"] }}</td>
+                                    <td class="h6">{{ file["date"] }}</td>
+                                    <td class="h6">{{ file["download_count"] }}</td>
+                                    {# 0: 未审核 (普通用户上传文件默认 0) 1: 审核成功 (管理员上传文件默认 1)  2: 审核失败  3: 上传失败#}
+
+                                    {% if file["status"] == 0 %}
+                                        <td class="h6">Pending review</td>
+                                    {% elif file["status"] == 1 %}
+                                        <td class="h6">Success</td>
+                                    {% elif file["status"] == 2 %}
+                                        <td class="h6">Failure</td>
+
+                                    {% end %}
+
+                                    {% if page_info["is_select"] == 2 %}
+                                        <td class="h6" style=" min-width: 100px;">
+{#                                            <a class="btn topaz_link" href="/review_file?fid={{ file["id"] }}&status=1" style="text-decoration: underline"> 通过 </a>#}
+{#                                            <button onclick="ReviewFile({{ file["id"] }}, 1)" style="text-decoration: underline"> 通过 </button>#}
+                                            <button  onclick="ReviewFile({{ file["id"] }}, 1, 0)" style="color: #264555; text-decoration: underline">Resume</button>
+                                            <p></p>
+                                            <button class="tbtn" onclick="DeleteResource({{ file["id"] }}, 1)" style="color: #264555; text-decoration: underline">Delete</button>
+                                        </td>
+                                    {% elif page_info["is_select"] == 0%}
+                                        <td class="h6" style=" min-width: 100px;">
+                                            <button  onclick="ReviewFile({{ file["id"] }}, 1, 0)" style="color: #264555; text-decoration: underline">Pass</button>
+                                            <p></p>
+                                            <button  onclick="ReviewFile({{ file["id"] }}, 2, 0)" style="color: #264555; text-decoration: underline">Refuse</button>
+
+                                        </td>
+                                    {% end %}
+
+                                    <td class="h6" style=" min-width: 100px;">
+
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" name="cartFilter1" type="checkbox" id="delete_{{ file["id"] }}"  >
+                                            <label class="custom-control-label" for="delete_{{ file["id"] }}"></label>
+                                         </div>
+                                    </td>
+
+
+                                {% end %}
+
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                        <ul class="pag pag-light justify-content-center">
+
+
+                            {# 上一页 #}
+                            {% if page_info["current_page"] - 1 > 0 %}
+                            <li class="pag-item ">
+                                <a class="pag-link pag-link-prev"
+                                   href="/manage_files?page={{ subtract(page_info["current_page"], 1) }}&select={{ page_info["is_select"] }}">
+                                    <span class="pag-icon mdi-chevron-left novi-icon"></span>
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            {% elif page_info["current_page"] - 1 == 0 %}
+                            <li class="pag-item disabled">
+                                <a class="pag-link pag-link-prev"
+                                   href="/manage_files?page={{ subtract(page_info["current_page"], 1) }}&select={{ page_info["is_select"] }}">
+                                    <span class="pag-icon mdi-chevron-left novi-icon"></span>
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            {% end %}
+
+
+                            {#  Page part #}
+                            {#                {% if page_info["total_page"] > 5 %}#}
+                            {% if page_info["current_page"] - 2 >= 0 %}
+                            {% if page_info["current_page"] + 1  == page_info["total_page"] %}
+                            {% if subtract(page_info["current_page"], 3) > 0 %}
+                            <li class="pag-item ">
+                                <a class="pag-link" href="/manage_files?page={{ subtract(page_info["current_page"], 3) }}&select={{ page_info["is_select"] }}">
+                                    {{ subtract(page_info["current_page"], 3) }}
+                                </a>
+                            </li>
+                            {% end %}
+
+                            {% elif page_info["current_page"]  == page_info["total_page"] %}
+                            {% if subtract(page_info["current_page"], 4) > 0 %}
+                            <li class="pag-item ">
+                                <a class="pag-link" href="/manage_files?page={{ subtract(page_info["current_page"], 4) }}&select={{ page_info["is_select"] }}">
+                                    {{ subtract(page_info["current_page"], 4) }}
+                                </a>
+                            </li>
+                            {% end %}
+                            {% if subtract(page_info["current_page"], 3) > 0 %}
+                            <li class="pag-item ">
+                                <a class="pag-link" href="/manage_files?page={{ subtract(page_info["current_page"], 3) }}&select={{ page_info["is_select"] }}">
+                                    {{ subtract(page_info["current_page"], 3) }}
+                                </a>
+                            </li>
+                            {% end %}
+
+                            {% end %}
+
+                            {% if page_info["current_page"] > 2 %}
+                            <li class="pag-item ">
+                                <a class="pag-link" href="/manage_files?page={{ subtract(page_info["current_page"], 2) }}&select={{ page_info["is_select"] }}">
+                                    {{ subtract(page_info["current_page"], 2) }}
+                                </a>
+                            </li>
+                            {% end %}
+
+                            <li class="pag-item ">
+                                <a class="pag-link" href="/manage_files?page={{ subtract(page_info["current_page"], 1) }}&select={{ page_info["is_select"] }}">
+                                    {{ subtract(page_info["current_page"], 1) }}
+                                </a>
+                            </li>
+
+                            {% end %}
+
+                            <li class="pag-item active">
+                                <a class="pag-link"
+                                   href="/manage_files?page={{ page_info["current_page"] }}&select={{ page_info["is_select"] }}">{{ page_info["current_page"] }}
+                                </a>
+                            </li>
+
+                            {% if page_info["current_page"] + 2  <= page_info["total_page"] %}
+                            <li class="pag-item ">
+                                <a class="pag-link" href="/manage_files?page={{ add(page_info["current_page"], 1) }}&select={{ page_info["is_select"] }}">
+                                    {{ add(page_info["current_page"], 1) }}
+                                </a>
+                            </li>
+
+                            <li class="pag-item ">
+                                <a class="pag-link" href="/manage_files?page={{ add(page_info["current_page"], 2) }}&select={{ page_info["is_select"] }}">
+                                    {{ add(page_info["current_page"], 2) }}
+                                </a>
+                            </li>
+
+                            {% elif page_info["current_page"] + 1  <= page_info["total_page"] %}
+                            <li class="pag-item ">
+                                <a class="pag-link" href="/manage_files?page={{ add(page_info["current_page"], 1) }}&select={{ page_info["is_select"] }}">
+                                    {{ add(page_info["current_page"], 1) }}
+                                </a>
+                            </li>
+
+
+                            {% end %}
+
+                            {#  前面没有页数可显示, 所以用大的页数 #}
+                            {% if page_info["current_page"] < 3 %}
+                            {% if page_info["total_page"] >=  add(page_info["current_page"], 3) %}
+                            <li class="pag-item ">
+                                <a class="pag-link" href="/manage_files?page={{ add(page_info["current_page"], 3) }}&select={{ page_info["is_select"] }}">
+                                    {{ add(page_info["current_page"], 3) }}
+                                </a>
+                            </li>
+                            {% end %}
+
+                            {% if page_info["current_page"] < 2 %}
+                            {% if page_info["total_page"] >=  add(page_info["current_page"], 4) %}
+                            <li class="pag-item ">
+                                <a class="pag-link" href="/manage_files?page={{ add(page_info["current_page"], 4) }}&select={{ page_info["is_select"] }}">
+                                    {{ add(page_info["current_page"], 4) }}
+                                </a>
+                            </li>
+                            {% end %}
+                            {% end %}
+
+                            {% end %}
+
+                            {#                {% end %}#}
+
+                            {# 下一页 #}
+                            {% if page_info["total_page"] - page_info["current_page"] > 0 %}
+                            <li class="pag-item">
+                                <a class="pag-link pag-link-next"
+                                   href="/manage_files?page={{ add(page_info["current_page"], 1) }}&select={{ page_info["is_select"] }}">
+                                    <span>Next</span>
+                                    <span class="pag-icon mdi-chevron-right novi-icon"></span>
+                                </a>
+                            </li>
+                            {% elif page_info["total_page"] - page_info["current_page"] == 0 %}
+                            <li class="pag-item disabled">
+                                <a class="pag-link pag-link-next"
+                                   href="/manage_files?page={{ add(page_info["current_page"], 1) }}&select={{ page_info["is_select"] }}">
+                                    <span>Next</span>
+                                    <span class="pag-icon mdi-chevron-right novi-icon"></span>
+                                </a>
+                            </li>
+
+                            {% end %}
+
+                            {#                最后一页#}
+                            {% if page_info["total_page"] > 5 %}
+                            {% if page_info["total_page"] == page_info["current_page"] %}
+                            <li class="pag-item disabled">
+                                {% else %}
+                            <li class="pag-item">
+                                <a class="pag-link pag-link-end" href="/manage_files?page={{ page_info["total_page"] }}&select={{ page_info["is_select"] }}">
+                                    <span>Last</span>
+                                    <span class="pag-icon mdi-chevron-double-right novi-icon"></span>
+                                </a>
+                            </li>
+                            {% end %}
+                            {% end %}
+
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+    </section>
+
+    <section class="footer footer-dark context-dark bg-800" style="margin-top: 10%">
+        <div class="container">
+            <div class="row row-30">
+                <div class="col-sm-6 col-lg-3">
+                    <!-- Logo-->
+                    <div class="logo">
+                        <a class="logo-link" href="/">
+{#                            <img class="logo-image-default" src="/static/images/meowfile.png" alt="Airy" width="146" height="36">#}
+                            <img class="logo-image-inverse" src="/static/images/meowfile.png" alt="Airy" width="146" height="36">
+                        </a>
+                    </div>
+                    <p>Meow File is file management system for file sharing between different departments of the company. </p>
+                    <div class="social group-20">
+{#                        <a class="social-icon icon icon-md icon-link onclinic-instagram" href="#"></a>#}
+                    </div>
+            </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <h5 class="footer-title">Contacts</h5>
+                    <ul class="list list-icons">
+                        <li class="list-item">
+                            <div class="list-icon onclinic-map-marker"></div>
+                            ChaoYang, Beijing
+                        </li>
+                        <li class="list-item">
+                            <div class="list-icon onclinic-phone"></div>
+                            8615600803270
+                        </li>
+                        <li class="list-item">
+                            <div class="list-icon onclinic-email-open"></div>
+                            topaz1668@gmail.com
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <h5 class="footer-title">Useful Links</h5>
+                    <ul class="list list-sm">
+                      <li class="list-item"><a href="https://topaz1618.github.io/about/">About</a></li>
+                      <li class="list-item"><a href="https://topaz1618.github.io/projects/">Projects</a></li>
+                      <li class="list-item"><a href="https://topaz1618.github.io/blog/">Blog</a></li>
+                    </ul>
+                </div>
+
+
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer footer-minimal context-dark bg-900">
+        <div class="container">
+            <!-- Copyright-->
+            <p class="rights">Copyright &copy; 2020.Company name All rights reserved.<a target="_blank"
+                                                                                        href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a>
+            </p>
+        </div>
+    </footer>
+</div>
+<!-- Preloader-->
+<div class="preloader">
+    <div class="preloader-inner">
+        <div class="preloader-dot"></div>
+        <div class="preloader-dot"></div>
+        <div class="preloader-dot"></div>
+        <div class="preloader-dot"></div>
+    </div>
+</div>
+</body>
+</html>
+
+<script src="/static/components/base/core.min.js"></script>
+<script src="/static/components/base/script.js"></script>
+<script src="/static/js/jquery.min.js"></script>
+
+<script type="text/javascript">
+    var shop_header = document.getElementById("shop_header");
+    var shop_title = document.getElementById("shop_title");
+
+    function FreshPage() {
+        setTimeout("window.location.reload(window.location.href)", 200);
+
+    }
+
+    function ChoiceAll(){
+        var all_items;
+
+        all_items = document.getElementsByName("cartFilter1");
+
+        for (let i=0; i<all_items.length; i++){
+            all_items[i].checked = "checked"
+        }
+
+    }
+
+    function CancelAll() {
+        var all_items;
+        all_items = document.getElementsByName("cartFilter1");
+
+
+        for (let i=0; i<all_items.length; i++){
+            all_items[i].checked = ""
+        }
+
+
+    }
+
+
+    function DeleteFiles() {
+        var all_items;
+        var resource_list = [];
+        all_items = document.getElementsByName("cartFilter1");
+
+        for (let i=0; i<all_items.length; i++){
+            if (all_items[i].checked == true){
+                resource_list.push(all_items[i].parentNode.parentNode.parentNode.id);
+            }
+        }
+        console.log("!!!!!!!!!", resource_list);
+
+        const formData = new FormData();
+        formData.append("resource_list", resource_list);
+        if (resource_list.length == 0){
+            alert("请选择删除资源")
+        }else {
+            $.ajax({
+            url: "/manage_files",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                var error_code = response["error_code"];
+                if (error_code == "1000") {
+                    alert(response["msg"]);
+                    window.location.href = window.location.href.split("?")[0];
+                    return;
+                }else{
+                    alert(response["msg"]);
+                }
+
+            }
+         });
+        }
+    }
+
+
+    function ReviewFile(fid, status, current_status) {
+        const formData = new FormData();
+        formData.append("fid", fid);
+        formData.append("status", status);
+        $.ajax({
+            url: "/review_file",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                var error_code = response["error_code"];
+                if (error_code == "1000") {
+                    var file_name = document.getElementById(fid).children[0].innerText;
+                    document.getElementById("modal").style.display = "block";
+                    if (current_status == 2){
+                        document.getElementById("review_text").innerText = "Restore file " + file_name + " success";
+                    }
+                    else{
+
+                        document.getElementById("review_text").innerText = "File " + file_name + " review success";
+                    }
+
+                    {#setTimeout("window.location.reload(window.location.href)", 2000);#}
+                    return;
+                }else{
+                    alert("File review status update failed: " + response["msg"]);
+                }
+
+            }
+        });
+
+    }
+
+    function ShowTag(id) {
+        var tag_id = "info_tag_" + id;
+        var tag_el = document.getElementById(tag_id);
+        tag_el.style.display =  "";
+
+        setTimeout(function () {
+            tag_el.style.display =  "none";
+        }, 600);
+    }
+
+    function ShowInfo() {
+        var tag_el = document.getElementById("tag");
+        tag_el.style.display =  "";
+
+        setTimeout(function () {
+            tag_el.style.display =  "none";
+        }, 1600);
+    }
+
+
+    function SelectFiles() {
+        var sort_selecter = document.getElementById("file_selector").value;
+        var addr;
+        if (sort_selecter){
+            var current_url = window.location.href.split("?");
+            console.log(current_url);
+            var filter = "";
+            var current_host = current_url[0];
+            var uri_str = current_url[1];
+
+            if (uri_str != undefined){
+                var uri_list = uri_str.split("&");
+                for (let num=0; num in uri_list; num++){
+                    if (uri_list[num].startsWith("filter")){
+                        filter = uri_list[num];
+                    }
+                }
+            }
+
+            if (filter.length == 0){
+                addr = current_host + "?" + "select=" + sort_selecter;
+            }else{
+                addr = current_host + "?" + "select=" + sort_selecter + "&" + filter
+            }
+
+            {#var addr = "http://" + window.location.host + "/store_catalog?page=" + current_page + "&sort=" + sort_selecter;#}
+            console.log("!! Addr", addr);
+            window.location.href = addr;
+
+        }
+    }
+
+    function CheckedFilter() {
+        var filter_str = window.location.href.split("filter=");
+        if (filter_str.length > 1) {
+            var filter_list = filter_str[1].split("+");
+            console.log(filter_list);
+            for (let i = 0; i in filter_list; i++) {
+                console.log(filter_list[i]);
+                document.getElementById(filter_list[i]).checked = true
+            }
+        }
+    }
+
+    function DeleteResource(resource_id, resource_type) { // zip:1 feature:2 goods:3
+        console.log("product id", resource_id, resource_type);
+        const formData = new FormData();
+        formData.append("resource_type", resource_type);
+        formData.append("resource_id", resource_id);
+        $.ajax({
+            url: "/manager_resources",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                var error_code = response["error_code"];
+                if (error_code == "1000") {
+                    window.location.reload();
+                    return;
+                }else{
+                    alert(response["msg"]);
+                }
+
+            }
+        });
+
+
+    }
+
+
+    // For listen Page width change
+    var option = {
+        attributes: true,
+        attributeFilter: ['class']
+    };
+
+    var mutationObserver = new MutationObserver(function (mutations) {
+        if (shop_header.className.indexOf('rd-navbar-fixed') != -1) {
+            shop_title.style.display = "None";
+        } else {
+            shop_title.style.display = "Block";
+        }
+    });
+
+    mutationObserver.observe(shop_header, option);
+    CheckedFilter();
+</script>

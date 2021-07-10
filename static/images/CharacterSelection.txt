@@ -1,0 +1,80 @@
+{
+	"Type": "Tree",
+	"Content": 
+	[
+		{
+			"Name": 
+			{
+				"Key": "男",
+				"Native String": "男",
+				"Localized Strings": 
+				[
+					{
+						"Localized Strings Key": "en",
+						"Localized Strings": "Man"
+					}
+				]
+			},
+			"Type": "Tree",
+			"Content":
+			[
+				{
+					"Name": 
+					{
+						"Key": "男1",
+						"Native String": "男1",
+						"Localized Strings": 
+						[
+							{
+								"Localized Strings Key": "en",
+								"Localized Strings": "Man1"
+							}
+						]
+					},
+					"Type": "Character Selection",
+					"Content": 
+					{
+						"Blueprint Name": "Man01"
+					}
+				}
+			]
+		},
+		{
+			"Name": 
+			{
+				"Key": "女",
+				"Native String": "女",
+				"Localized Strings": 
+				[
+					{
+						"Localized Strings Key": "en",
+						"Localized Strings": "Woman"
+					}
+				]
+			},
+			"Type": "Tree",
+			"Content":
+			[
+				{
+					"Name": 
+					{
+						"Key": "女1",
+						"Native String": "女1",
+						"Localized Strings": 
+						[
+							{
+								"Localized Strings Key": "en",
+								"Localized Strings": "Woman1"
+							}
+						]
+					},
+					"Type": "Character Selection",
+					"Content": 
+					{
+						"Blueprint Name": "Girl"
+					}
+				}
+			]
+		}
+	]
+}

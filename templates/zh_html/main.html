@@ -1,0 +1,798 @@
+<!--Copyright: "Copyright (c) 2021 HangYan"-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>File management system</title>
+    {#    <meta charset="utf-8">#}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="Template Monster Admin Template">
+    <meta property="og:description"
+          content="brevis, barbatus clabulares aliquando convertam de dexter, peritus capio. devatio clemens habitio est.">
+    <link rel="stylesheet" href="/static/components/base/base.css">
+    <style>
+        .blurb.blurb-boxed-simple.topaz {
+            border: 0.16rem solid #dde0e9;
+            border-top-right-radius: 22px;
+            border-bottom-right-radius: 22px;
+            border-bottom-left-radius: 22px;
+        }
+
+        .blurb.blurb-boxed-simple.topaz:hover {
+            border: 0.18rem solid #1c54e2;
+        }
+
+        .custom-control-text.topaz_text {
+            color: #6c757d;
+        }
+
+        ::-webkit-scrollbar-thumb:horizontal { /*水平滚动条的样式*/
+        	width: 5px;
+        	background-color: #CCCCCC;
+            {#background-color: #a4bbf9;#}
+        	-webkit-border-radius: 6px;
+        }
+        ::-webkit-scrollbar-track-piece {
+        	background-color: #fff; /*滚动条的背景颜色*/
+        	-webkit-border-radius: 0; /*滚动条的圆角宽度*/
+        }
+        ::-webkit-scrollbar {
+        	width: 10px; /*滚动条的宽度*/
+        	height: 8px; /*滚动条的高度*/
+        }
+        ::-webkit-scrollbar-thumb:vertical { /*垂直滚动条的样式*/
+        	height: 50px;
+        	background-color: #999;
+        	-webkit-border-radius: 4px;
+        	outline: 2px solid #fff;
+        	outline-offset: -2px;
+        	border: 2px solid #fff;
+        }
+
+        ::-webkit-scrollbar-thumb:hover { /*滚动条的hover样式*/
+        	height: 50px;
+        	{#background-color: #9f9f9f;#}
+            background-color:  #a4bbf9;
+        	-webkit-border-radius: 4px;
+        }
+
+
+
+    </style>
+
+
+</head>
+<body>
+<div class="page">
+    <!--RD Navbar-->
+
+{# Header  #}
+    <header class="section rd-navbar-wrap rd-navbar-wrap-transparent">
+        <nav id="shop_header" class="rd-navbar rd-navbar-solid rd-navbar-transparent"
+             data-rd-navbar='{"responsive":{"1200":{"stickUpOffset":"164px"}}}'>
+            <div class="navbar-section navbar-non-stuck">
+                <div class="navbar-panel">
+                    <button class="navbar-switch mdi-menu novi-icon"
+                            data-multi-switch='{"targets":".rd-navbar","scope":".rd-navbar","isolate":"[data-multi-switch]"}'></button>
+                    <div class="navbar-logo">
+                        <a class="navbar-navigation-root-link" href="/" style="width: 160%; font-size: 22px; font-weight: 500; margin-top: -4%;"> 文件管理系统 </a>
+                    </div>
+                </div>
+                <div class="navbar-container">
+                    <div class="navbar-cell flex-grow-1">
+                        <div class="navbar-info">
+                            <div class="list list-icons-2">
+                                <div class="list-item">
+                                    <li class="navbar-navigation-root-item">
+                                        <a id="shop_title" class="navbar-navigation-root-link" href="/"
+                                           style="font-size: 28px; font-weight: 500;"> 文件管理系统 </a>
+                                    </li>
+                                </div>
+                            </div>
+                            <div class="navbar-logo navbar-fullwidth-logo">
+                                <a class="navbar-logo-link" href="tmp/index.html">
+                                </a>
+                            </div>
+                            <div class="text-block text-block-2 d-md-flex align-items-center justify-content-center">
+                                <div class="list list-icons-2">
+                                    <div class="list-item">
+                                        {% if username == None%}
+                                            <a class="navbar-navigation-root-link" style="display: inline-block; " href="/login">
+                                                <span id="username" class="mdi-account-outline" style="display: inline-block"> Log in </span>
+                                            </a>
+                                            <a class="navbar-navigation-root-link" style="display: inline-block; " href="/logout">
+                                                <span id="username" class="mdi-logout" style="display: inline-block"> Log out </span>
+                                            </a>
+
+                                        {% else %}
+                                            <a class="navbar-navigation-root-link" style="display: inline-block; " href="/user_info">
+                                                <span id="username" class="mdi-account" style="display: inline-block"> {{ username }} </span>
+                                            </a>
+                                            <a class="navbar-navigation-root-link" style="display: inline-block; " href="/logout">
+                                                <span id="username" class="mdi-logout" style="display: inline-block"> Log out </span>
+                                            </a>
+
+                                        {% end %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="navbar-cell">
+                        <div class="navbar-subpanel">
+                            <div class="navbar-subpanel-item">
+                                <button class="navbar-button navbar-info-button mdi-dots-vertical novi-icon"
+                                        data-multi-switch='{"targets":".rd-navbar","scope":".rd-navbar","class":"navbar-info-active","isolate":"[data-multi-switch]"}'></button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-section">
+                <div class="navbar-container navbar-sidebar" style="margin-top: 1%">
+                    <div class="navbar-cell flex-grow-1" style="border-bottom: 1px solid #dde0e9;">
+                        <ul class="navbar-navigation rd-navbar-nav" style="margin-left: 58px">
+                            <li class="navbar-navigation-root-item active" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/">
+                                    <span class="product-btn btn topaz btn-icon mdi-home" style="display: inline-block; border: 1px solid white;">
+                                        <span> Home </span>
+                                    </span>
+                                </a>
+                            </li>
+                            {% if is_admin == 1 %}
+                                <li class="navbar-navigation-root-item rd-navbar--has-dropdown rd-navbar-submenu" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/create_user">
+                                    <span class="product-btn btn topaz btn-icon mdi-cake"  style="display: inline-block; border: 1px solid white;"> 用户管理 </span>
+                                </a><span class="rd-navbar-submenu-toggle"></span>
+                                <ul class="navbar-navigation-dropdown rd-navbar-dropdown">
+                                    <li class="navbar-navigation-back">
+                                        <button class="navbar-navigation-back-btn">Back</button>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/create_user">
+                                            <span class="mdi-account-multiple-plus" style="display: inline-block; ">  创建新用户 </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/update_permission">
+                                            <span class="mdi-clipboard-account" style="display: inline-block; "> 用户权限管理  </span>
+                                        </a>
+
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/reset_password">
+                                            <span class="mdi-key-change" style="display: inline-block; "> 用户密码重置  </span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                                </li>
+                            {% end %}
+
+                            {%if is_admin == 2%}
+                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">
+                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/upload_file">
+                                        <span class="product-btn btn topaz btn-icon " style="display: inline-block; border: 1px solid white;">
+                                            <span class="mdi-upload" style="font-size: 21px;"></span>
+                                            <span style="margin-left: 1px"> 上传资源 </span>
+                                        </span>
+                                    </a>
+                                </li>
+
+                            {% end %}
+
+                            {% if is_admin == 1 or is_admin == 2%}
+
+                                <li class="navbar-navigation-root-item rd-navbar--has-dropdown rd-navbar-submenu" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/file_list">
+                                    <span class="product-btn btn topaz btn-icon mdi-package" style="display: inline-block; border: 1px solid white;">
+                                        文件管理
+                                    </span>
+
+                                </a>
+                                <span class="rd-navbar-submenu-toggle"></span>
+                                <ul class="navbar-navigation-dropdown rd-navbar-dropdown">
+                                    <li class="navbar-navigation-back">
+                                        <button class="navbar-navigation-back-btn">Back</button>
+                                    </li>
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/pending_list">
+                                            <span class="mdi-checkbox-marked-circle-outline" style="display: inline-block; ">
+                                                待审核文件
+                                                <span id="pending_file1" class="tag tag-tertiary " style="display: none; font-size:12px; border-radius: 80%; height:26px; width: auto; line-height: 0.8">
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/file_list">
+                                             <span class="mdi-view-list" style="display: inline-block; "> 所有资源列表  </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/manage_files">
+{#                                            linearicons-box#}
+                                             <span class="linearicons-file-code" style="display: inline-block; "></span>
+                                            <span style="display: inline-block; margin-left: -1px"> 文件批量管理  </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/download_record">
+{#                                            note book#}
+                                             <span class="mdi-format-list-numbers" style="display: inline-block;  ">  </span>
+                                            <span style="display: inline-block;">资源下载记录 </span>
+
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+
+                                <li class="navbar-navigation-root-item rd-navbar--has-dropdown rd-navbar-submenu" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/upload_file">
+                                    <span class="product-btn btn topaz btn-icon mdi-book" style="display: inline-block; border: 1px solid white">
+                                        我的资源
+                                    </span>
+                                </a><span class="rd-navbar-submenu-toggle"></span>
+                                <ul class="navbar-navigation-dropdown rd-navbar-dropdown">
+                                    <li class="navbar-navigation-back">
+                                        <button class="navbar-navigation-back-btn">Back</button>
+                                    </li>
+{##}
+{#                                    <li class="navbar-navigation-dropdown-item">#}
+{#                                        <a class="navbar-navigation-dropdown-link" href="/upload_file">#}
+{#                                             <span class="mdi-upload" style="display: inline-block; ">#}
+{##}
+{#                                             </span>#}
+{#                                            <span style="display: inline-block"> 上传文件 </span>#}
+{#                                        </a>#}
+{#                                    </li>#}
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/my_files">
+{#                                            <span class="linearicons-user" style="display: inline-block;font-size: 1.1rem;"> </span>#}
+{#                                            <span class="mdi-account" style="display: inline-block;font-size: 14px;margin-left: -20.6px;"> </span>#}
+                                            <span class="mdi-account-outline" style="display: inline-block; "> </span>
+                                            <span style="display: inline-block; margin-left: 2px">我的上传  </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/my_record">
+                                            <span class="mdi-download" style="display: inline-block; font-size: 16px;">   </span>
+                                            <span style="display: inline-block; margin-left: 2px">我的下载  </span>
+
+
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+
+                            {% else %}
+                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">
+                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/upload_file">
+                                        <span class="product-btn btn topaz btn-icon " style="display: inline-block; border: 1px solid white;">
+                                            <span class="mdi-cloud-upload" style="font-size: 21px;"></span>
+                                            <span style="margin-left: 1px"> 上传资源 </span>
+
+                                        </span>
+
+                                    </a>
+                                </li>
+                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">
+                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/file_list">
+                                        <span class="product-btn btn topaz btn-icon " style="display: inline-block; border: 1px solid white;">
+                                            <span class="mdi-check-all" style="font-size: 21px;"></span>
+                                            <span style="margin-left: 1px"> 文件列表 </span>
+                                        </span>
+                                    </a>
+                                </li>
+
+                                <li class="navbar-navigation-root-item rd-navbar--has-dropdown rd-navbar-submenu" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/my_files">
+                                    <span class="product-btn btn topaz btn-icon mdi-book" style="display: inline-block; border: 1px solid white">
+                                        我的资源
+                                    </span>
+                                </a><span class="rd-navbar-submenu-toggle"></span>
+                                <ul class="navbar-navigation-dropdown rd-navbar-dropdown">
+                                    <li class="navbar-navigation-back">
+                                        <button class="navbar-navigation-back-btn">Back</button>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/my_record">
+                                             <span class="mdi-download" style="display: inline-block; ">
+
+                                             </span>
+                                            <span style="display: inline-block"> 我的下载 </span>
+                                        </a>
+                                    </li>
+
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/my_files">
+                                             <span class="mdi-upload" style="display: inline-block; ">
+
+                                             </span>
+                                            <span style="display: inline-block"> 我的上传 </span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navbar-navigation-dropdown-item">
+                                        <a class="navbar-navigation-dropdown-link" href="/file_list">
+                                             <span class="mdi-file-document" style="display: inline-block; ">
+
+                                             </span>
+                                            <span style="display: inline-block"> 所有文件列表 </span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+
+
+
+{#                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">#}
+{#                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/">#}
+{#                                        <span class="product-btn btn topaz btn-icon mdi-download" style="display: inline-block; border: 1px solid white;">#}
+{#                                            <span> 我的下载 </span>#}
+{#                                        </span>#}
+{#                                    </a>#}
+{#                                </li>#}
+
+{#                                <li class="navbar-navigation-root-item active" style="margin-left: -58px;">#}
+{#                                    <a class="navbar-navigation-root-link" style="display: inline-block; " href="/">#}
+{#                                        <span class="product-btn btn topaz btn-icon mdi-book" style="display: inline-block; border: 1px solid white;">#}
+{#                                            <span> 我的文件 </span>#}
+{#                                        </span>#}
+{#                                    </a>#}
+{#                                </li>#}
+
+
+                            {% end %}
+
+                            <li class="navbar-navigation-root-item" style="margin-left: -58px;">
+                                <a class="navbar-navigation-root-link" style="display: inline-block; " href="/user_info">
+                                 <span class="product-btn btn topaz btn-icon mdi-account" style="display: inline-block; border: 1px solid white;"> 个人信息 </span>
+                                </a>
+                            </li>
+
+
+
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+{# Body  #}
+    <section class="section section-md bg-primary-lightest text-center" style="">
+
+        {% if is_admin == 1 or is_admin == 2%}
+            <div class="container" style="margin-top: 2%">
+                <div class="text-block">
+                    <div class="title-1"><a class="link link-inherit topaz_link" href="#"> File management system </a></div>
+
+                    <h2>
+                        <span class="icon blurb-icon linearicons-library" style="font-size: 3rem; margin-left: 10px"></span>
+                        文件管理系统
+                    </h2>
+                </div>
+
+            </div>
+
+            {% if is_admin == 1 %}
+
+            <div class="container" style="margin-top: 6%">
+            <div class="text-block">
+                <h3>
+                    <span class="icon blurb-icon linearicons-users2" style="font-size: 2.6rem; margin-left: 10px; color: #1c54e2"></span>
+                    用户管理
+                </h3>
+            </div>
+            <ul class="nav nav-line justify-content-center active" role="tablist" style="">
+                <li class="nav-item">
+                    <a class="nav-link h6 active" data-toggle="tab" href="#navLine3-1" role="tab" aria-selected="true"></a>
+                </li>
+            </ul>
+            <div id="why_choose_us" class="row row-20 row-lg-40 row-content" style="margin-top: 5.8%; width: 96%; margin-left: 2%;">
+                <div class="col-md-4 d-flex" style=" min-height: 228px;">
+                    <article class="blurb blurb-boxed-simple topaz" style="">
+                        <div class="blurb-item">
+                            <div class="icon blurb-icon linearicons-user-plus"></div>
+                            <div class="blurb-title h4"> <span style="font-size: 21px"> </span> 创建新用户 </div>
+                        </div>
+                        <a class="blurb-link-overlay" href="/create_user"></a>
+                    </article>
+                </div>
+                <div class="col-md-4 d-flex" style=" min-height: 228px;">
+
+                    <article class="blurb blurb-boxed-simple topaz" >
+                        <div class="blurb-item">
+                            <div class="icon blurb-icon linearicons-clipboard-user"></div>
+                            <div class="blurb-title h4"><span style="font-size: 21px"> </span> 用户权限管理 </div>
+                        </div>
+                        <a class="blurb-link-overlay" href="/update_permission"></a>
+                    </article>
+                </div>
+                <div class="col-md-4 d-flex" style=" min-height: 228px;">
+
+                    <article class="blurb blurb-boxed-simple topaz" >
+                        <div class="blurb-item">
+                            <div class="icon blurb-icon linearicons-calendar-user"></div>
+                            <div class="blurb-title h4"><span style="font-size: 21px"> </span> 用户密码重置 </div>
+                        </div>
+                        <a class="blurb-link-overlay" href="/reset_password"></a>
+                    </article>
+                </div>
+                <div class="col-md-4 d-flex" style=" min-height: 228px;">
+                    <article class="blurb blurb-boxed-simple topaz" >
+                        <div class="blurb-item">
+                            <div class="linearicons-users2" style="font-size: 2.8rem;  color: #1c54e2"></div>
+                            <span class="blurb-title h4" style="">
+                                所有用户列表
+                            </span>
+                        </div>
+
+                        <a class="blurb-link-overlay" href="/user_list"></a>
+
+                    </article>
+                </div>
+
+            </div>
+
+        </div>
+
+            {% end %}
+
+
+            <div class="container" style="margin-top: 6%">
+
+            <div class="text-block">
+                <h3>
+                    <span class="mdi-file-document" style="font-size: 2.6rem; margin-left: 10px; color: #1c54e2"></span>
+                    文件资源管理
+                </h3>
+            </div>
+
+            <ul class="nav nav-line justify-content-center active" role="tablist" style="">
+                <li class="nav-item">
+                    <a class="nav-link h6 active" data-toggle="tab" href="#navLine3-1" role="tab" aria-selected="true"></a>
+                </li>
+            </ul>
+
+            <div id="why_choose_us" class="row row-20 row-lg-40 row-content" style="margin-top: 5.8%; width: 98%; margin-left: 1%;">
+                <div class="col-md-4 d-flex" style=" min-height: 228px;">
+                    <article class="blurb blurb-boxed-simple topaz" style="">
+                        <div class="blurb-item">
+                            <div class="icon blurb-icon linearicons-cloud-upload"></div>
+                            <div class="blurb-title  h4" style="letter-spacing: 2px; margin-left: 36px"> 上传文件  </div>
+                        </div>
+                        <a class="blurb-link-overlay" href="/upload_file"></a>
+                    </article>
+                </div>
+
+                <div class="col-md-4 d-flex" style=" min-height: 228px;">
+
+                    <article class="blurb blurb-boxed-simple topaz" >
+
+                        <div class="blurb-item">
+{#                            <div class="onclinic-check" style="font-size: 2.6rem; color: #1c54e2"></div>#}
+                            <span class="mdi-checkbox-marked-circle-outline" style="font-size: 2.6rem;  color: #1c54e2"></span>
+                            <div class="blurb-title h4">
+                                待审核资源
+                            </div>
+                        </div>
+
+                        <a class="blurb-link-overlay" href="/pending_list"></a>
+                         <span id="pending_file0" class="tag tag-tertiary " style="display: none;  border-radius: 80%;  line-height: 1.2; height: 30px; width: auto; margin-left: 28px; margin-top: 76px; font-size: 12px;    text-align: center;"></span>
+
+                    </article>
+                </div>
+
+                <div class="col-md-4 d-flex" style=" min-height: 228px;">
+
+                    <article class="blurb blurb-boxed-simple topaz" >
+                        <div class="blurb-item">
+                            <span class="mdi-view-list" style="font-size: 2.6rem;  color: #1c54e2"></span>
+                            <div class="blurb-title h4"> 所有资源列表 </div>
+                        </div>
+                        <a class="blurb-link-overlay" href="/file_list"></a>
+                    </article>
+                </div>
+
+                                <div class="col-md-4 d-flex" style=" min-height: 228px;">
+                    <article class="blurb blurb-boxed-simple topaz" style="">
+                        <div class="blurb-item">
+                            <div class="icon blurb-icon linearicons-pencil3" style="border-bottom: 2px solid; border-bottom-left-radius: 2px; border-bottom-right-radius: 6px;"></div>
+                            <div class="blurb-title  h4"> 资源下载日志  </div>
+                        </div>
+                        <a class="blurb-link-overlay" href="/download_record"></a>
+                    </article>
+                </div>
+
+                <div class="col-md-4 d-flex" style=" min-height: 228px;">
+                    <article class="blurb blurb-boxed-simple topaz" >
+                        <div class="blurb-item">
+{#                            <span class="mdi-file-multiple" style="font-size: 2.6rem;  color: #1c54e2"></span>#}
+                            <div class="icon blurb-icon linearicons-box"></div>
+
+                            <div class="blurb-title h4"> 资源批量管理 </div>
+                        </div>
+                        <a class="blurb-link-overlay" href="/manage_files"></a>
+                    </article>
+                </div>
+
+                <div class="col-md-4 d-flex" style=" min-height: 228px;">
+                    <article class="blurb blurb-boxed-simple topaz" >
+                        <div class="blurb-item">
+                            <div class="mdi-account-outline" style="font-size: 2.8rem;  color: #1c54e2"></div>
+                            <span class="blurb-title h4" style="letter-spacing: 1px; margin-left: 26px">
+                                我的文件目录
+                            </span>
+                        </div>
+
+                        <a class="blurb-link-overlay" href="/my_files"></a>
+                         <span id="pending_file0" class="tag tag-tertiary " style="display: none;  border-radius: 80%; height: 30px; width: 32px; margin-left: 28px; margin-top: 74px; font-size: 12px;    text-align: center;"></span>
+
+                    </article>
+                </div>
+
+
+            </div>
+
+        </div>
+{#            <div class="container" style="margin-top: 6%">#}
+{##}
+{#            <div class="text-block">#}
+{#                <h3>#}
+{#                    <span class="mdi-briefcase-upload" style="font-size: 2.6rem; margin-left: 10px; color: #1c54e2"></span>#}
+{#                    文件上传 & 我的文件#}
+{#                </h3>#}
+{#            </div>#}
+{##}
+{##}
+{#            <ul class="nav nav-line justify-content-center active" role="tablist" style="">#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link h6 active" data-toggle="tab" href="#navLine3-1" role="tab" aria-selected="true"></a>#}
+{#                </li>#}
+{#            </ul>#}
+{#            <div id="why_choose_us" class="row row-20 row-lg-40 row-content" style="margin-top: 5.8%; width: 92%; margin-left: 4%;">#}
+{##}
+{##}
+{##}
+{##}
+{#            </div>#}
+{##}
+{#        </div>#}
+        {% else %}
+            <div class="container" style="margin-top: 0.98%">
+                <div class="text-block">
+                    <div class="title-1"><a class="link link-inherit topaz_link" href="#"> File management system </a></div>
+
+                    <h2>
+                        <span class="icon blurb-icon linearicons-library" style="font-size: 3rem; margin-left: 10px"></span>
+                        <span style="margin-left: 8px; letter-spacing: normal;">  文件管理系统 </span>
+                    </h2>
+                </div>
+
+            </div>
+            <div class="container" style="margin-top: 5.8%">
+
+            <div class="text-block">
+                <h3>
+                    <span class="linearicons-box" style="font-size: 2rem; margin-left: 10px; color: #1c54e2"></span>
+                    <span style="margin-left: 1%; font-size: 28px;"> 上传 & 管理用户文件 </span>
+                </h3>
+            </div>
+
+
+            <ul class="nav nav-line justify-content-center active" role="tablist" style="margin-top: -7.2px">
+                <li class="nav-item">
+                    <a class="nav-link h6 active" data-toggle="tab" href="#navLine3-1" role="tab" aria-selected="true"></a>
+                </li>
+            </ul>
+            <div id="why_choose_us" class="row row-20 row-lg-40 row-content" style="margin-top: 5.8%; width: 92%; margin-left: 4%;">
+
+                <div class="col-md-4 d-flex" style=" min-height: 228px;">
+                    <article class="blurb blurb-boxed-simple topaz" style="">
+                        <div class="blurb-item">
+                            <div class="icon blurb-icon linearicons-cloud-upload"></div>
+                            <div class="blurb-title  h4" style=""> 上传文件资源  </div>
+                        </div>
+                        <a class="blurb-link-overlay" href="/upload_file"></a>
+                    </article>
+                </div>
+                <div class="col-md-4 d-flex" style=" min-height: 228px;">
+
+                    <article class="blurb blurb-boxed-simple topaz" >
+                        <div class="blurb-item">
+{#                            file-code#}
+                            <span class="linearicons-list3" style="font-size: 2.6rem;  color: #1c54e2"></span>
+                            <div class="blurb-title h4"> 所有资源列表 </div>
+                        </div>
+                        <a class="blurb-link-overlay" href="/file_list"></a>
+                    </article>
+                </div>
+
+
+                <div class="col-md-4 d-flex" style=" min-height: 228px;">
+
+                    <article class="blurb blurb-boxed-simple topaz" >
+                        <div class="blurb-item">
+                            <div class="linearicons-book2" style="font-size: 2.8rem;  color: #1c54e2"></div>
+                            <span class="blurb-title h4">
+                                查看 & 管理我的文件
+                            </span>
+                        </div>
+
+                        <a class="blurb-link-overlay" href="/my_files"></a>
+{#                         <span id="pending_file0" class="tag tag-tertiary " style="display: none;  border-radius: 80%; height: 30px; width: 32px; margin-left: 28px; margin-top: 74px; font-size: 12px;    text-align: center;"></span>#}
+
+                    </article>
+                </div>
+
+            </div>
+
+        </div>
+
+        {% end %}
+
+
+    </section>
+
+
+    <section class="footer footer-dark context-dark bg-800" style="margin-top: 10%">
+        <div class="container">
+            <div class="row row-30">
+                <div class="col-sm-6 col-lg-3">
+                    <!-- Logo-->
+                    <div class="logo">
+                        <a class="logo-link" href="/">
+{#                            <img class="logo-image-default" src="/static/images/meowfile.png" alt="Airy" width="146" height="36">#}
+                            <img class="logo-image-inverse" src="/static/images/meowfile.png" alt="Airy" width="146" height="36">
+                        </a>
+                    </div>
+                    <p>Meow File is file management system for file sharing between different departments of the company. </p>
+                    <div class="social group-20">
+{#                        <a class="social-icon icon icon-md icon-link onclinic-instagram" href="#"></a>#}
+                    </div>
+            </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <h5 class="footer-title">Contacts</h5>
+                    <ul class="list list-icons">
+                        <li class="list-item">
+                            <div class="list-icon onclinic-map-marker"></div>
+                            ChaoYang, Beijing
+                        </li>
+                        <li class="list-item">
+                            <div class="list-icon onclinic-phone"></div>
+                            8615600803270
+                        </li>
+                        <li class="list-item">
+                            <div class="list-icon onclinic-email-open"></div>
+                            topaz1668@gmail.com
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <h5 class="footer-title">Useful Links</h5>
+                    <ul class="list list-sm">
+                      <li class="list-item"><a href="https://topaz1618.github.io/about/">About</a></li>
+                      <li class="list-item"><a href="https://topaz1618.github.io/projects/">Projects</a></li>
+                      <li class="list-item"><a href="https://topaz1618.github.io/blog/">Blog</a></li>
+                    </ul>
+                </div>
+
+
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer footer-minimal context-dark bg-900">
+        <div class="container">
+        </div>
+    </footer>
+</div>
+<!-- Preloader-->
+<div class="preloader">
+    <div class="preloader-inner">
+        <div class="preloader-dot"></div>
+        <div class="preloader-dot"></div>
+        <div class="preloader-dot"></div>
+        <div class="preloader-dot"></div>
+    </div>
+</div>
+
+<div class="to-top mdi-chevron-up "></div>
+</body>
+</html>
+<script src="/static/components/base/core.min.js"></script>
+<script src="/static/components/base/script.js"></script>
+<script src="/static/js/jquery.min.js"></script>
+<script type="text/javascript">
+
+    function PendingFileCount() {
+        const formData = new FormData();
+        formData.append("resource_type", 1);
+
+        $.ajax({
+            url: "/file_num",
+            type: "GET",
+            {#data: formData,#}
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                var error_code = response["error_code"];
+                if (error_code == "1000") {
+                    if (response["msg"] != 0){
+                        var pending_file0 = document.getElementById("pending_file0");
+                        var pending_file1 = document.getElementById("pending_file1");
+
+                        if (pending_file0 != null && pending_file1 != null){
+                            document.getElementById("pending_file0").style.display = "inline-block";
+                            document.getElementById("pending_file0").innerText = response["msg"];
+                            document.getElementById("pending_file1").style.display = "inline-block";
+                            document.getElementById("pending_file1").innerText = response["msg"];
+
+                        }
+                    }
+
+                    return;
+
+                }else{
+                    console.log(response["msg"]);
+                }
+
+            }
+        });
+
+
+
+    }
+
+    PendingFileCount();
+
+
+
+    var option = {
+        attributes: true,
+        attributeFilter: ['class']
+    };
+
+
+
+
+    var mutationObserver = new MutationObserver(function (mutations) {
+        if (shop_header.className.indexOf('rd-navbar-fixed') != -1) {
+            shop_title.style.display = "None";
+            {#shop_phone.style.display = "Block";#}
+        } else {
+            shop_title.style.display = "Block";
+            {#shop_phone.style.display = "None";#}
+
+        }
+    });
+
+    mutationObserver.observe(shop_header, option)
+
+</script>

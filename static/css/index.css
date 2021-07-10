@@ -1,0 +1,202 @@
+.fl{
+    float: left;
+}
+.fr{
+    float: right;
+}
+.w1300{
+    width: 1300px;
+    margin: 0 auto;
+}
+.head_top{
+    /* width: 1300px; */
+    margin: 0 auto;
+    background: url("../images/dingshanglanhu.jpg") no-repeat center;
+    height: 260px;
+    overflow: hidden;
+}
+.top_title{
+    width: 120px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    font-size: 22px;
+    border: 2px solid white;
+    border-radius: 10px;
+    color: white;
+    margin: 0 auto;
+}
+.top_content{
+    height: 490px;
+    background: url("../images/yuanjiaojuxing.png") no-repeat center;
+    margin-top: -175px;
+    text-align: center;
+}
+.top_content_left{
+    display: inline-block;
+    float: left;
+    margin-left: 170px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+.top_content_center{
+    width: 550px;
+    height: 245px;
+    margin:  0 auto;
+}
+.top_content_center img{
+    width: 100%;
+}
+.changge_message{
+    font-size: 20px;
+    margin: 20px;
+    color: #555555;
+    cursor: pointer;
+}
+.top_content_foot{
+    padding: 0px 197px;
+    font-size: 26px;
+    color:#2387F6;
+}
+.top_content_foot div{
+    margin-bottom:20px;
+}
+.use_icon{
+    background: url("../images/yonghuming.jpg") no-repeat 0;
+    background-size: 20px 18px;
+}
+.email_icon{
+    background: url("../images/youxiangtubiao.jpg") no-repeat 0;
+    background-size: 20px 18px;
+}
+.member_date_icon{
+    background: url("../images/jiezhiqishu.jpg") no-repeat 0;
+    background-size: 20px 18px;
+}
+.member_count_icon{
+    background: url("../images/shengyuzhangshu.jpg") no-repeat 0;
+    background-size: 20px 18px;
+}
+
+.top_content_foot span{
+    color: black;
+}
+
+.member_center{
+    margin: 0px 0 ;
+}
+.member_center table th{
+    text-align: center;
+}
+.member_center table td{
+    text-align: center;
+}
+.c_blue{
+    color: #2387F6;
+    border:2px solid #2387F6;
+}
+.member_top{
+    height: 45px;
+    border-bottom: 1px solid #BFBFBF;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 38px;
+}
+.member_top span{
+    display: inline-block;
+    font-size: 30px;
+    color: #2387F6;
+    border-bottom: 3px solid #2387F6;
+}
+.member_content{
+    overflow: hidden;
+    text-align: center;
+}
+.member_content ul .member_li{
+    background: url("../images/taocanlanse.jpg") no-repeat;
+    height: 555px;
+    width: 273px;
+    float: left;
+    margin-left: 70px;
+    margin-bottom: 30px;
+    position: relative;
+}
+.taocan_title{
+    width: 107px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    border-radius: 8px;
+    margin:38px 80px 58px;
+    background: #2D87F5;
+}
+.money{
+    font-size: 20px;
+    color: white;
+    margin-bottom: 40px;
+}
+.money span{
+    font-size: 38px;
+}
+.line_blue{
+    border:1px solid #9DCDFB;
+    width: 50px;
+    margin-left: 94px;
+    margin-top: 30px;
+}
+.member_xiangxi{
+    width: 230px;
+    margin: 0 auto;
+    padding: 8px;
+    font-size: 16px;
+    color: white;
+}
+.member_foot{
+    position: absolute;
+    bottom: 30px;
+    left: 75px;
+    cursor: pointer;
+}
+
+.footer{
+	width: 100%;
+	text-align: center;
+	color: #999;
+	font-size: 13px;
+}
+
+.footer a{
+	color: #666;
+	text-decoration: underline;
+}
+.end-line {
+	padding: 12px 0;
+	overflow: hidden;
+}
+.end-line {
+	padding: 0;
+}
+.end-line p {
+	text-align: center;
+	margin: 0;
+}
+.end-line p span {
+	display: inline-block;
+	color: #253135;
+	font-size: 13px;
+	font-family: 'Open Sans', sans-serif;
+	line-height: 16px;
+	margin-right: 13px;
+}
+.end-line p span i {
+	color: #0077f9;
+	font-size: 14px;
+	vertical-align: middle;
+	display: inline-block;
+	padding: 0 10px;
+}
+
+
+

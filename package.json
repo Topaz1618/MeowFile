@@ -1,0 +1,23 @@
+{
+  "name": "ManageFile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "spark-md5": "^3.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@127.0.0.1:topaz/managefile.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

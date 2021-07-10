@@ -1,0 +1,102 @@
+<!--Copyright: "Copyright (c) 2021 HangYan"-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/register-login.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.css" media="screen">
+
+</head>
+<body>
+<div id="box"></div>
+<div class="cent-box">
+    <div class="cent-box-header">
+    </div>
+    <div class="cent-box-content">
+        <div class="form-warning"></div>
+
+        <form method='POST' id="form1">
+            <div id="login">
+                <div class="border-btm form-ipt">
+                    <input type="text" id="phonenum" name="phonenum" maxlength="11" placeholder="请输入用户名"
+                          >
+                </div>
+                <div class="form-ipt">
+                    <input type="password" id="password" name="password" maxlength="21" placeholder="请输入密码">
+                </div>
+
+                <input class="form-ipt" id="is_browser" name="is_browser" value="Ture" style="display: none">
+                <div class="form-ipt" style="display: none">
+                    <input type="text" id="device_type" name="device_type" value="pc">
+                </div>
+            </div>
+            <div class="button">
+                <button type="button" class="submit-btn" id="button" onclick="authLogin()">登录</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div class="footer">
+    <p>MeowFile</p>
+    <div class="end-line">
+        <p>
+            <span><i class="fa fa-phone"></i>8615600803270</span>
+            <span><i class="fa fa-envelope-o"></i>topaz1668@gmail.com</span>
+        </p>
+    </div>
+</div>
+
+<script src='/static/js/particles.js' type="text/javascript"></script>
+<script src='/static/js/background.js' type="text/javascript"></script>
+<script src='/static/js/jquery.min.js' type="text/javascript"></script>
+<script src='/static/js/jquery.js' type="text/javascript"></script>
+<script type="text/javascript">
+
+
+    function authLogin() {
+        $.ajax({
+            //几个参数需要注意一下
+            type: "POST",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: "login",
+            data: $('#form1').serialize(),
+            async: true,
+
+            success: function (data) {
+                console.log(data);
+                var res = data.error_code;
+                console.log(data.error_code);
+                if (res == '1000') {
+                    console.log(">>>>");
+                    window.location.href = "/"
+                } else {
+                    var error_msg = data.msg;
+                    $('.form-warning').html("<a>" + error_msg + "</a>");
+                }
+            },
+            error: function () {
+                $('.form-warning').html("<a>服务器异常</a>");
+
+            }
+
+        })
+    }
+
+    function setCookie(key, value, expiredays) {
+        var exdate = new Date();
+        exdate.setDate(exdate.getDate() + expiredays);
+        document.cookie = key + "=" + escape(value) +
+            ((expiredays == null) ? "" : "; expires=" + exdate.toGMTString())
+    }
+
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FILE MANAGEMENT SYSTEM</title>
+    {#    <meta charset="utf-8">#}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:title" content="Template Monster Admin Template">
+    <meta property="og:description"
+          content="brevis, barbatus clabulares aliquando convertam de dexter, peritus capio. devatio clemens habitio est.">
+    <link rel="stylesheet" href="/static/components/base/base.css">
+
+    <style>
+
+        #cover{
+            position:absolute;left:0px;top:0px;
+            background:rgba(0, 0, 0, 0.4);
+            width:100%;  /*宽度设置为100%，这样才能使隐藏背景层覆盖原页面*/
+            height:100%;
+            filter:alpha(opacity=60);  /*设置透明度为60%*/
+            opacity:0.6;  /*非IE浏览器下设置透明度为60%*/
+            display:none;
+            z-Index:999;
+        }
+        #modal{
+            position:absolute;
+            width: auto;
+            height: auto;
+            min-width: 600px;
+            max-width: 800px;
+            overflow: auto;
+
+            max-height: 600px;
+            top: 28%;
+            left: 28%;
+            background-color:#fff;
+            display:none;
+            cursor:pointer;
+            z-Index:9999;
+            color: #264555;
+            font-size: 26px;
+            box-shadow: 0px 34px 40px rgba(38, 69, 85, 0.06);
+            padding: 1.18125rem 1.75rem;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div id="cover"></div>
+
+      上传进度:<span id="uploadProgress">0</span>%
+      <input multiple type="file" id="file">
+      <button onclick="UploadFiles()">上传文件</button>
+
+          <div id="modal"  style=" border: 2px solid #f2f2f2; border-radius: 10px ">
+            <div style="font-size: 22px; margin-top: 18px; color: #a4bbf9;">
+                <span id="upload_info" style="margin-left: 2%;margin-top: -1%"> 文件上传中, 请勿刷新或关闭页面 ......</span>
+            </div>
+
+
+      <ul id="file_list">
+{#          <li id="file_0">#}
+{#              <button name="control" value="true"></button>#}
+{#              <span>1.zip</span>#}
+{#              <span>0%</span>#}
+{#              <button id="pause" onclick="ContorlTag(this)">暂停</button>#}
+{#              <button id="play" onclick="ContorlTag(this)">继续</button>#}
+{#          </li>#}
+{#          <li id="file_1">#}
+{#              <button name="control" value="true"></button>#}
+{#              <span>2.zip</span>#}
+{#              <span>0%</span>#}
+{#              <button id="pause" onclick="ContorlTag(this)">暂停</button>#}
+{#              <button id="play" onclick="ContorlTag(this)">继续</button>#}
+{#          </li>#}
+
+
+      </ul>
+      <li id="li_model" style="display: none; font-size: 0.88rem;  margin-left: 8px; margin-top: 10px; max-height: 23px ">
+          <button name="control" value="true"></button>
+          <span style="min-width: 280px;max-width: 280px; display: inline-block; text-align:left; line-height: 1; overflow: hidden;   text-overflow: ellipsis; white-space:nowrap;"></span>
+          <span>0%</span>
+          <button id="pause" onclick="ContorlTag(this)">暂停</button>
+          <button id="play" onclick="ContorlTag(this)">继续</button>
+
+      </li>
+
+        <p></p>
+        <div>
+            <span id="close"  onclick="HideShadow()" style="margin-top: 18px;display: inline-block;box-shadow: rgba(108, 117, 125, 0.1) 1px 24px 16px;background-color: rgb(255, 255, 255);font-size: 0.88rem;width: 88px; text-align: center;height: 36px;line-height: 2.2;color: #a6b2d4;border-radius: 10px;border: 1px solid #a5adc036;">
+                <span >
+                    取消上传
+                </span>
+            </span>
+            <span id="complete"  onclick="HideShadow()" style="margin-top: 18px;display: inline-block;box-shadow: rgba(108, 117, 125, 0.1) 1px 24px 16px;background-color: rgb(255, 255, 255);font-size: 0.88rem;width: 88px; text-align: center;height: 36px;line-height: 2.2;color: #a6b2d4;border-radius: 10px;border: 1px solid #a5adc036;">
+                <span >
+                    确认完成
+                </span>
+            </span>
+
+    </div>
+
+
+
+
+<!-- Preloader-->
+
+<div class="to-top mdi-chevron-up "></div>
+</body>
+</html>
+<script src="/static/components/base/core.min.js"></script>
+<script src="/static/components/base/script.js"></script>
+<script src="/static/js/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/spark-md5/2.0.2/spark-md5.min.js"></script>
+
+<script type="text/javascript">
+
+    function sleep(ms){
+        return new Promise((resolve)=>setTimeout(resolve,ms));
+    }
+
+    async function test(){
+        var temple=await sleep(1000);
+        console.log(1111);
+        return temple;
+    }
+
+    function ContorlTag(element) {
+        if (element.id == "pause"){
+            element.parentElement.children[0].value = "false";
+
+        }else if(element.id == "play"){
+            element.parentElement.children[0].value = "true";
+            var num = parseInt(element.parentNode.id.split("_")[1]);
+            var file_el = document.getElementById("file");
+            var file = file_el.files[num];
+            Upload(file, num);
+        }
+
+    }
+
+    function S4() {
+        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    }
+
+    function guid() {
+        return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+    }
+
+
+    function ShowShadow(){
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+        document.getElementById("modal").style.display = "block";
+        document.getElementById("cover").style.display = "block";
+    }
+
+    function HideShadow(){
+        {#document.getElementById("modal").style.display = "";#}
+        {#document.getElementById("cover").style.display = "";#}
+        window.location.reload();
+
+    }
+
+    function CreateFileList(files) {
+        var list_el = document.getElementById("file_list");
+        var li_model = document.getElementById("li_model");
+        list_el.innerText = "";
+        for (let i=0; i< files.files.length; i++){
+            var li_ele = li_model.cloneNode(true);
+            li_ele.id = "file_" + i;
+            li_ele.style.display = "inline-block";
+            li_ele.children[1].innerText = files.files[i].name;
+            list_el.appendChild(li_ele);
+        }
+    }
+
+
+    function SmallFile(file) {
+        const fileReader = new FileReader();
+        fileReader.readAsBinaryString(file);
+        fileReader.onload = e => {
+        const md5 = SparkMD5.hashBinary(e.target.result);
+            console.log(">>>", md5);
+        }
+    }
+
+
+    function CalculateMd5(file, chunkSize) {
+        return new Promise((resolve, reject) => {
+            let blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
+            let chunks = Math.ceil(file.size / chunkSize);
+            let currentChunk = 0;
+            let spark = new SparkMD5.ArrayBuffer();
+            let fileReader = new FileReader();
+
+			fileReader.onload = function(e) {
+				spark.append(e.target.result);
+				currentChunk++;
+				if (currentChunk < chunks) {
+					loadNext();
+				} else {
+					let md5 = spark.end();
+					resolve(md5);
+				}
+			};
+
+			fileReader.onerror = function(e) {
+				reject(e);
+			};
+
+			function loadNext() {
+				let start = currentChunk * chunkSize;
+				let end = start + chunkSize;
+				if (end > file.size){
+					end = file.size;
+				}
+				fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
+			}
+            loadNext();
+        });
+    }
+
+    async function UploadWorker(file, md5, check_data, num){
+        var defer = $.Deferred();
+        var blockSize = 50;
+        var filename = file.name;
+        var count = 0;
+        var idx = 0;
+
+        var r_start = check_data["current_pos"];
+        var slice_list = check_data["slice_list"];
+
+        var total_chunk = Math.ceil(file.size / blockSize);
+        var file_uuid = guid();
+
+        if (r_start > 0){
+        //    count = parseInt(r_start / blockSize);
+            idx = parseInt(r_start / blockSize);
+            let percent  = (idx / total_chunk) * 100;
+            percent = percent.toFixed(2);
+            document.getElementById("file_list").children[num].children[2].innerText = percent + "%";
+        }
+
+        for (let start = 0; start < file.size; start += blockSize) {
+            console.log("!!! start_from herr", start);
+            count += 1;
+
+            var end;
+            if (start + blockSize > file.size) {
+                end = file.size;
+            } else {
+                end = start + blockSize;
+
+            }
+            await sleep(2000);
+
+            const chunk = file.slice(start, end);
+            console.log(chunk);
+            console.log(count, '/', total_chunk, start, end);
+            var self_el = document.getElementById("file_list").children[num].children;
+            var flag = self_el[0].value;
+
+
+            if (flag == "true" && slice_list.indexOf(count) == -1){
+                console.log("!!!!!!!!!!!!!! >>>>>", count, filename);
+                const formData = new FormData();
+                formData.append("file", chunk);
+                formData.append("md5", md5);
+                formData.append("filesize", file.size);
+                formData.append("filename", filename);
+                formData.append("media_type", 1);
+                formData.append("count", count);
+                formData.append("total_chunk", total_chunk);
+                formData.append("uuid", file_uuid);
+
+                $.ajax({
+                type: "post",
+                url: "/test",
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    console.log(res);
+                    idx += 1;
+                    let percent  = (idx / total_chunk) * 100;
+                    percent = percent.toFixed(2);
+                    {#document.getElementById("uploadProgress").innerText = percent + "%";#}
+                    self_el[2].innerText = percent + "%";
+                    console.log("Done count:" + idx);
+                    if (idx >= total_chunk || res == "success"){
+                        defer.resolve(true);
+                        if (total_chunk > 1) {
+                            console.log("win");
+                            const formData = new FormData();
+                            formData.append("merge", true);
+                            formData.append("filename", filename);
+                            formData.append("total_chunk", total_chunk);
+                            formData.append("uuid", file_uuid);
+                            formData.append("md5", md5);
+                            $.ajax({
+                                url: "/t_merge_file",
+                                type: "POST",
+                                data: formData,
+                                async: false,
+                                processData: false,
+                                contentType: false,
+                                success: function (response) {
+                                    if (response == "false") {
+                                        {#return setTimeout("notify_merge();", 500);#}
+                                        return false;
+                                    }
+                                    else {
+                                        return true
+                                    }
+                                }
+                            });
+
+                        }
+
+                        return "!!! All ok" + idx;
+                    }
+                }
+            });
+
+            }
+
+            console.log("???? flag", flag);
+
+        }
+
+        return defer.promise();
+    }
+
+
+    function Upload(file, num){
+        var filename = file.name;
+        CalculateMd5(file, 50).then(md5_sum => {
+			console.log("md5=" + md5_sum);
+            const formData = new FormData();
+            formData.append("md5_sum", md5_sum);
+            formData.append("filename", filename);
+            formData.append("blocksize", 50);
+            $.ajax({
+                url: "/check_file_exists",
+                type: "POST",
+                data: formData,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log("!!!!!!!!", response);
+                    if(response["error_code"] == "0"){
+                        // Todo: 记录存在且二次校验文件 md5 一致，创建新纪录. 显示进度 100 %
+                        {#alert("!!! Already exists");#}
+                        document.getElementById("file_list").children[num].children[2].innerText = "100%";
+
+
+                    }else if(response["error_code"] == "1"){
+                        var data = response["msg"];
+                        console.log("current_pos", data["current_pos"]);
+                        UploadWorker(file, md5_sum, data, num);
+
+                    }else{
+                        alert("Upload file from 0", response["msg"]);
+                        var data = response["msg"];
+                        UploadWorker(file, md5_sum, data, num);
+                    }
+                }
+            });
+            return md5_sum;
+        }).catch(md5_sum => {
+            console.error(md5_sum);
+        });
+    }
+
+    function UploadFiles() {
+        var file_el = document.getElementById("file");
+        CreateFileList(file_el);
+        ShowShadow();
+
+        // Todo: 创建 ul 列表, 显示遮罩层
+        for (let i=0; i < file_el.files.length; i++){
+            var file = file_el.files[i];
+            Upload(file, i);
+        }
+    }
+
+    timer = setInterval((function target () {
+
+        var file_list = document.getElementById("file_list").children;
+
+        var done_count = 0;
+
+        for(let i=0; i < file_list.length; i++){
+            var present = file_list[i].children[2].innerText;
+            if (parseInt(present)==100){
+                done_count +=1;
+            }
+        }
+
+        if (file_list.length >0 && done_count == file_list.length){
+            document.getElementById("upload_info").innerText = "文件已全部上传完成 ... ";
+            setTimeout("window.location.reload()", 2200);
+        }else{
+            return target
+        }
+
+    })(), 1000);
+
+
+    var option = {
+        attributes: true,
+        attributeFilter: ['class']
+    };
+
+
+
+</script>
