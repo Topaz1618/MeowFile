@@ -1,6 +1,6 @@
 <img src='static/images/meowfile.png' width='400' title='MeowFile, A file management system'>
 
-A file sharing management system by [Topaz](https://topaz1618.github.io/about)|[Website](http://topazaws.com/)|[Blog](https://topaz1618.github.io/blog/)
+A file sharing management system by [Topaz](https://topaz1618.github.io/about)([Website](http://topazaws.com/)|[Blog](https://topaz1618.github.io/blog/))
 
 [Chinese README](https://github.com/Topaz1618/FileManageSystem/blob/master/README_CN.md)
 
